@@ -15,7 +15,12 @@ public class IA {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        /*Declaramos el objeto*/
+		PantallaAcademica miVentanaPrincipal;
+		/*Instanciamos el objeto*/
+		miVentanaPrincipal= new PantallaAcademica();
+		/*Hacemos que se cargue la ventana*/
+		miVentanaPrincipal.setVisible(true);
     }
     
 }
