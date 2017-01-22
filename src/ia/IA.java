@@ -16,9 +16,9 @@ public class IA {
      */
     public static void main(String[] args) {
         /*Declaramos el objeto*/
-		PantallaAcademica miVentanaPrincipal;
+		PantallaPrincipal miVentanaPrincipal;
 		/*Instanciamos el objeto*/
-		miVentanaPrincipal= new PantallaAcademica();
+		miVentanaPrincipal= new PantallaPrincipal();
 		/*Hacemos que se cargue la ventana*/
 		miVentanaPrincipal.setVisible(true);
     }
