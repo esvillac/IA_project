@@ -32,7 +32,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
     private Container contenedor;/*declaramos el contenedor*/
     private JButton agregar,siguiente,agregarMateriasSemestre, agregarMateriasReprobadas, agregarMateriasDeseables;
-    private JLabel mensaje, agregarPromedio;/*declaramos el objeto Label*/
+    private JLabel mensaje, agregarPromedio,materias_d,materias_r,materias_s;/*declaramos el objeto Label*/
     private JTextField campo, promedio;
     private JList listaMaterias, listaMateriasSemetresAnterior, listaMateriasReprobadas, listaMateriasDeseables;
     private DefaultListModel modelo,modeloReprobadas,modeloSemestre,modeloDeseables;/*declaramos el Modelo*/
@@ -48,7 +48,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         /*Asigna un titulo a la barra de titulo*/
         setTitle("Actividad Academica");
         /*tamaño de la ventana*/
-        setSize(800, 500);
+        setSize(800, 550);
         /*pone la ventana en el Centro de la pantalla*/
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,32 +63,39 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         campo = new JTextField();
         campo.setBounds(20, 80, 135, 23);
         agregar = new JButton();
-        agregar.setText("Agregar");
-        agregar.setBounds(160, 80, 100, 23);
+        agregar.setText("Agregar materia");
+        agregar.setBounds(160, 80, 150, 23);
         siguiente= new JButton();
         siguiente.setText("Siguiente");
         siguiente.setBounds(580, 440, 150, 23);
         agregar.addActionListener(this);
         siguiente.addActionListener(this);
         agregarPromedio = new JLabel("Ingresar promedio semestral");
+        materias_d = new JLabel("Materias que podria coger");
+        materias_r = new JLabel("Materias reprobadas en semestre anterior");
+        materias_s = new JLabel("Materias registradas en semestre anterior");
+
+        materias_d.setBounds(420, 50, 280, 23);
+        materias_r.setBounds(420, 225, 280, 23);
+        materias_s.setBounds(20, 300, 280, 23);
         agregarPromedio.setBounds(150, 20, 280, 23);
         promedio = new JTextField();
         promedio.setBounds(380, 20, 135, 23);
 
         agregarMateriasSemestre = new JButton();
         agregarMateriasSemestre.setText("+");
-        agregarMateriasSemestre.setBounds(20, 270, 100, 23);
+        agregarMateriasSemestre.setBounds(20, 270, 50, 23);
         agregarMateriasSemestre.addActionListener(this);
         
 
         agregarMateriasDeseables = new JButton();
         agregarMateriasDeseables.setText("+");
-        agregarMateriasDeseables.setBounds(260, 120, 120, 23);
+        agregarMateriasDeseables.setBounds(310, 120, 50, 23);
         agregarMateriasDeseables.addActionListener(this);
 
         agregarMateriasReprobadas = new JButton();
         agregarMateriasReprobadas.setText("+");
-        agregarMateriasReprobadas.setBounds(260, 245, 120, 23);
+        agregarMateriasReprobadas.setBounds(310, 245, 50, 23);
         agregarMateriasReprobadas.addActionListener(this);
         mensaje = new JLabel();
         mensaje.setBounds(20, 250, 280, 23);
@@ -202,11 +209,11 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         scrollLista2 = new JScrollPane();
         scrollLista3 = new JScrollPane();
         scrollLista4 = new JScrollPane();
-        scrollLista.setBounds(20, 120, 240, 150);
+        scrollLista.setBounds(20, 120, 290, 150);
         scrollLista.setViewportView(listaMaterias);
-        scrollLista2.setBounds(20, 340, 240, 150);
+        scrollLista2.setBounds(20, 325, 240, 150);
         scrollLista2.setViewportView(listaMateriasSemetresAnterior);
-        scrollLista3.setBounds(420, 60, 240, 150);
+        scrollLista3.setBounds(420, 75, 240, 150);
         scrollLista3.setViewportView(listaMateriasDeseables);
         scrollLista4.setBounds(420, 250, 240, 150);
         scrollLista4.setViewportView(listaMateriasReprobadas);
@@ -221,6 +228,9 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         contenedor.add(agregarMateriasReprobadas);
         contenedor.add(siguiente);
         contenedor.add(mensaje);
+        contenedor.add(materias_d);
+        contenedor.add(materias_r);
+        contenedor.add(materias_s);
         contenedor.add(scrollLista);
         contenedor.add(scrollLista2);
         contenedor.add(scrollLista3);
