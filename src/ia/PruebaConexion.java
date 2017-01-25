@@ -8,28 +8,25 @@ public class PruebaConexion{
     {
         if (conexion != null)
             return;
-        String url = "Jdbc:postgresql://localhost:5432/postgres";
+        String url = "jdbc:postgresql://localhost:5432/postgres";
         try
         {
            Class.forName("org.postgresql.Driver");
            //Establecemos el Usuario y la contraseña
-           //Usuario= postgres
-           //Contraseña= 50cent
            conexion = DriverManager.getConnection(url,"postgres","awesome6");
            if (conexion !=null){
                System.out.println("Conexión a base de datos ... Ok");
            }
-        }catch(ClassNotFoundException e){
-            System.out.println("Error en ClassNotFoundException: " + e.getMessage());
         }
-        catch(SQLException e){
-            System.out.println("Error en SQLException: " + e.getMessage());
+        catch(Exception e){
+            System.out.println(e.getMessage());
         }
         catch(NoClassDefFoundError e){
             System.out.println("Error enn NoClassDefFoundError: " + e.getMessage());
         }
     }
-         public ResultSet dameNombre()
+    
+    public ResultSet dameNombre()
     {
         ResultSet rs = null;
         Statement s = null;
@@ -44,6 +41,7 @@ public class PruebaConexion{
         }
         return rs;
     }
+    
     public void cierraConexion()
     {
         try
