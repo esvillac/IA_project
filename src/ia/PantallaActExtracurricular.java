@@ -180,7 +180,12 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+                                        
         // TODO add your handling code here:
+        PantallaAcademica ventanaAcademica = new PantallaAcademica();
+        ventanaAcademica.setVisible(true);
+        this.setVisible(false);
+    
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
