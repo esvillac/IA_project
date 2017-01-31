@@ -8,6 +8,9 @@ package ia;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.color.CMMException;
 import java.awt.event.ActionEvent;
@@ -22,19 +25,27 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Box;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
 import jess.Fact;
 import jess.JessException;
 import jess.Rete;
@@ -57,6 +68,12 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     private String materiaElimnarSelec;
     private HashMap lista_materias_old = new HashMap();
     private HashMap lista_materias_new = new HashMap();
+    JRadioButton jRB_si_flujo= new JRadioButton("SI");
+    JRadioButton jRB_no_flujo = new JRadioButton("NO");
+    JRadioButton jRB_si_proyecto= new JRadioButton("SI");
+    JRadioButton jRB_no_proyecto= new JRadioButton("NO");
+    JComboBox<String> comboTipos;
+    boolean materia_nueva_existe = false;
 
     public PantallaAcademica() {
         /*permite iniciar las propiedades de los componentes*/
@@ -279,101 +296,42 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent evento) {
+        
         if (evento.getSource() == agregar) {
+            
+            if (lista_materias_new.containsKey(campo.getText())){
+                agregarNombre();
+                materia_nueva_existe = true;
+            }
+            else
+                materia_nueva_existe = false;
+            
             if (lista_materias_old.containsKey(campo.getText())) {
                 agregarNombre();
                 mensaje.setText("Se agregó un nuevo elemento");
+                
             } else {
-
-                lista_materias_new.put(campo.getText(), "4,Si,Si,F");
-                agregarNombre();
-                mensaje.setText("Materia nueva mas datos");
+                if(materia_nueva_existe==false){
+                    display();
+            }
+                
+//                lista_materias_new.put(campo.getText(), "4,Si,Si,F");///Corregir
+//                //agregarNombre();//
+//                mensaje.setText("Materia nueva mas datos");
             }
         }
 
         if (evento.getSource() == agregarMateriasSemestre) {
-            if (listaMaterias.getSelectedIndex() != -1) {
-                boolean existe = false;
-                String materiaSeleccionada = listaMaterias.getSelectedValue().toString();
-                if (listaMateriasSemetresAnterior.getModel().getSize() != 0) {
-                    for (int i = 0; i < listaMateriasSemetresAnterior.getModel().getSize(); i++) {
-                        Object item = listaMateriasSemetresAnterior.getModel().getElementAt(i);
-                        System.out.println("Item = " + item);
-                        if (item.equals(materiaSeleccionada)) {
-                            System.out.println("Ya existe");
-                            existe = true;
-                            break;
-                        }
-                    }
-                    if (existe == false) {
-                        modeloSemestre.addElement(listaMaterias.getSelectedValue().toString());
-                        listaMateriasSemetresAnterior.setModel(modeloSemestre);
-
-                    }
-
-                } else {
-                    modeloSemestre.addElement(listaMaterias.getSelectedValue().toString());
-                    listaMateriasSemetresAnterior.setModel(modeloSemestre);
-                }
-            }
-
+            verificaMateriaExiste(listaMaterias, listaMateriasSemetresAnterior, modeloSemestre);
+            
         }
         if (evento.getSource() == agregarMateriasReprobadas) {
-            if (listaMaterias.getSelectedIndex() != -1) {
-                //ListModel materiasReprobadas = listaMateriasReprobadas.getModel();
-                boolean existe = false;
-                String materiaSeleccionada = listaMaterias.getSelectedValue().toString();
-                if (listaMateriasReprobadas.getModel().getSize() != 0) {
-                    for (int i = 0; i < listaMateriasReprobadas.getModel().getSize(); i++) {
-                        Object item = listaMateriasReprobadas.getModel().getElementAt(i);
-                        System.out.println("Item = " + item);
-                        if (item.equals(materiaSeleccionada)) {
-                            System.out.println("Ya existe");
-                            existe = true;
-                            break;
-                        }
-                    }
-                    if (existe == false) {
-                        modeloReprobadas.addElement(listaMaterias.getSelectedValue().toString());
-                        listaMateriasReprobadas.setModel(modeloReprobadas);
-
-                    }
-
-                } else {
-                    modeloReprobadas.addElement(listaMaterias.getSelectedValue().toString());
-                    listaMateriasReprobadas.setModel(modeloReprobadas);
-                }
-            }
-
+            verificaMateriaExiste(listaMaterias, listaMateriasReprobadas, modeloReprobadas);
+            
         }
         if (evento.getSource() == agregarMateriasDeseables) {
-
-            if (listaMaterias.getSelectedIndex() != -1) {
-                boolean existe = false;
-                String materiaSeleccionada = listaMaterias.getSelectedValue().toString();
-                if (listaMateriasDeseables.getModel().getSize() != 0) {
-                    for (int i = 0; i < listaMateriasDeseables.getModel().getSize(); i++) {
-                        Object item = listaMateriasDeseables.getModel().getElementAt(i);
-                        System.out.println("Item = " + item);
-                        if (item.equals(materiaSeleccionada)) {
-                            System.out.println("Ya existe");
-                            existe = true;
-                            break;
-                        }
-                    }
-                    if (existe == false) {
-                        modeloDeseables.addElement(listaMaterias.getSelectedValue().toString());
-                        listaMateriasDeseables.setModel(modeloDeseables);
-
-                    }
-
-                } else {
-                    modeloDeseables.addElement(listaMaterias.getSelectedValue().toString());
-                    listaMateriasDeseables.setModel(modeloDeseables);
-                }
-
-            }
-
+            verificaMateriaExiste(listaMaterias, listaMateriasDeseables, modeloDeseables);
+            
         }
         if (evento.getSource() == siguiente) {
             PruebaConexion x = new PruebaConexion();
@@ -525,11 +483,112 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
     }
 
-    private void agregarNombre() {
+   private void agregarNombre() {
+        boolean existe = false;
         String nombre = campo.getText();
-        modelo.addElement(nombre);
-        listaMaterias.setModel(modelo);
-        campo.setText("");
+        int tam = listaMaterias.getModel().getSize();
+         if (tam != 0) {
+              for (int i = 0; i < tam; i++) {
+                String item = (String) listaMaterias.getModel().getElementAt(i);
+                System.out.println("Item = " + item);
+                if (item.equals(nombre)) {
+                    System.out.println(nombre+": Ya existe");
+                    campo.setText("");
+                    existe = true;
+                    break;
+                }
+                
+              }
+              if(existe == false){
+                System.out.println(nombre+": NO existe. La materia ha sido ingresada a la Lista");
+                modelo.addElement(nombre);
+                listaMaterias.setModel(modelo);
+                campo.setText("");
+                
+              }
+              
+         }
+         else{
+            modelo.addElement(nombre);
+            listaMaterias.setModel(modelo);
+            campo.setText("");
+         }
+         
+    }
+    
+    private void display() {
+        String[] tipos = { "Formativa", "Optativa", "Libre Opcion"};
+        comboTipos = new JComboBox<>(tipos);
+        JTextField nombreMat = new JTextField(campo.getText(),20);
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        JPanel panelFlujo = new JPanel();
+        JPanel panelProyecto = new JPanel();
+        JPanel JPCombo = new JPanel();
+        JPanel JPNombre = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        int min = 1;
+        int max = 5;
+        int step = 1;
+        int initValue = 1;
+        SpinnerModel modelSpin = new SpinnerNumberModel(initValue, min, max, step);
+        JSpinner spinnerCreditos = new JSpinner(modelSpin);
+        
+        JPNombre.add(new JLabel("NOMBRE:"));
+        JPNombre.add(Box.createHorizontalStrut(27));
+        JPNombre.add(nombreMat);
+        panel.add(JPNombre);
+        
+        
+        JPanel JPCredito =new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPCredito.add(new JLabel("CREDITOS:"));
+        JPCredito.add(Box.createHorizontalStrut(20));
+        JPCredito.add(spinnerCreditos);
+        panel.add(JPCredito);
+        
+        JPanel JPFlujo =new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPFlujo.add(new JLabel("FLUJO:"));
+        JPFlujo.add(Box.createHorizontalStrut(30));
+        panelFlujo.add(jRB_si_flujo);
+        panelFlujo.add(jRB_no_flujo);
+        JPFlujo.add(panelFlujo);
+        panel.add(JPFlujo);
+        
+        JPanel JPProyecto =new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPProyecto.add(new JLabel("PROYECTO:"));
+        JPProyecto.add(Box.createHorizontalStrut(6));
+        panelProyecto.add(jRB_si_proyecto);
+        panelProyecto.add(jRB_no_proyecto);
+        JPProyecto.add(panelProyecto);
+        panel.add(JPProyecto);
+        
+        JPanel JPTipo =new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPTipo.add(new JLabel("TIPO:"));
+        JPTipo.add(Box.createHorizontalStrut(40));
+        JPCombo.setSize(60, 10);
+        JPCombo.add(comboTipos);
+        JPTipo.add(JPCombo);
+        panel.add(JPTipo);
+        
+        
+        
+        UIManager.put("OptionPane.minimumSize",new Dimension(370,400));
+        int result = JOptionPane.showConfirmDialog(null, panel, "INGRESAR NUEVA MATERIA",
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            if( (jRB_si_proyecto.isSelected() || jRB_no_proyecto.isSelected()) && (jRB_si_flujo.isSelected() || jRB_no_flujo.isSelected()) &&
+                !(nombreMat.getText().isEmpty()) ){
+                lista_materias_new.put(nombreMat.getText(), spinnerCreditos.getValue().toString()+",Si,Si,"+comboTipos.getSelectedItem().toString());///Corregir "4,Si,Si,F"
+                agregarNombre();//
+                mensaje.setText("Materia nueva");
+            }
+            else{
+                System.out.println("Llene todos los campos");
+                display();
+            }
+            System.out.println(nombreMat.getText()
+                + " " + spinnerCreditos.getValue().toString());
+        } else {
+            System.out.println("Cancelled");
+        }
     }
 
     private void eliminarNombre(int indice) {
@@ -546,6 +605,33 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
     private void borrarLista() {
         modelo.clear();
+    }
+
+    private void verificaMateriaExiste(JList listaMaterias, JList listaMateriasCategoria ,DefaultListModel modelo){
+        if (listaMaterias.getSelectedIndex() != -1) {
+                boolean existe = false;
+                String materiaSeleccionada = listaMaterias.getSelectedValue().toString();
+                if (listaMateriasCategoria.getModel().getSize() != 0) {//
+                    for (int i = 0; i < listaMateriasCategoria.getModel().getSize(); i++) {//
+                        Object item = listaMateriasCategoria.getModel().getElementAt(i);//
+                        System.out.println("Item = " + item);
+                        if (item.equals(materiaSeleccionada)) {
+                            System.out.println("Ya existe");
+                            existe = true;
+                            break;
+                        }
+                    }
+                    if (existe == false) {
+                        modelo.addElement(listaMaterias.getSelectedValue().toString());
+                        listaMateriasCategoria.setModel(modelo);//
+
+                    }
+
+                } else {
+                    modelo.addElement(listaMaterias.getSelectedValue().toString());
+                    listaMateriasCategoria.setModel(modelo);//
+                }
+            }
     }
 
     private void eliminarMateriaItemActionPerformed(java.awt.event.ActionEvent evt) {

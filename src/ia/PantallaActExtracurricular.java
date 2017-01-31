@@ -5,6 +5,8 @@
  */
 package ia;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author Sixto Castro
@@ -16,6 +18,9 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
      */
     public PantallaActExtracurricular() {
         initComponents();
+        /*pone la ventana en el Centro de la pantalla*/
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     /**
@@ -29,17 +34,17 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
+        jCheckViveFuera = new javax.swing.JCheckBox();
+        jCheckTrabaja = new javax.swing.JCheckBox();
+        jCheckHijos = new javax.swing.JCheckBox();
+        jButtonSgt = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckCasado = new javax.swing.JCheckBox();
         jLabel6 = new javax.swing.JLabel();
-        jCheckBox5 = new javax.swing.JCheckBox();
+        jCheckImpedimento = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -48,27 +53,27 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel5.setText("ACTIVIDADES EXTRACURRICULARES");
 
-        jCheckBox2.setBackground(new java.awt.Color(180, 233, 163));
-        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+        jCheckViveFuera.setBackground(new java.awt.Color(180, 233, 163));
+        jCheckViveFuera.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox2ActionPerformed(evt);
+                jCheckViveFueraActionPerformed(evt);
             }
         });
 
-        jCheckBox3.setBackground(new java.awt.Color(180, 233, 163));
-        jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
+        jCheckTrabaja.setBackground(new java.awt.Color(180, 233, 163));
+        jCheckTrabaja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox3ActionPerformed(evt);
+                jCheckTrabajaActionPerformed(evt);
             }
         });
 
-        jCheckBox4.setBackground(new java.awt.Color(180, 233, 163));
+        jCheckHijos.setBackground(new java.awt.Color(180, 233, 163));
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jButton1.setText("Recomendar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonSgt.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jButtonSgt.setText("Siguiente");
+        jButtonSgt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonSgtActionPerformed(evt);
             }
         });
 
@@ -84,12 +89,12 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jLabel4.setText("¿Tiene hijo(s)?");
 
-        jCheckBox1.setBackground(new java.awt.Color(180, 233, 163));
+        jCheckCasado.setBackground(new java.awt.Color(180, 233, 163));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jLabel6.setText("¿Tiene algún impedimento físico?");
 
-        jCheckBox5.setBackground(new java.awt.Color(180, 233, 163));
+        jCheckImpedimento.setBackground(new java.awt.Color(180, 233, 163));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -103,10 +108,10 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(59, 59, 59)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton1)
+                            .addComponent(jButtonSgt)
                             .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jCheckBox5)))
+                        .addComponent(jCheckImpedimento)))
                 .addGap(61, 61, 61))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -118,10 +123,10 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jCheckBox2, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jCheckBox3)
-                        .addComponent(jCheckBox1)
-                        .addComponent(jCheckBox4))
+                        .addComponent(jCheckViveFuera, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jCheckTrabaja)
+                        .addComponent(jCheckCasado)
+                        .addComponent(jCheckHijos))
                     .addGap(62, 62, 62)))
         );
         jPanel1Layout.setVerticalGroup(
@@ -132,27 +137,27 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 194, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jCheckBox5, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jCheckImpedimento, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(33, 33, 33)
-                .addComponent(jButton1)
+                .addComponent(jButtonSgt)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(73, 73, 73)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jCheckBox2))
+                        .addComponent(jCheckViveFuera))
                     .addGap(18, 18, 18)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jCheckBox3)
+                        .addComponent(jCheckTrabaja)
                         .addComponent(jLabel2))
                     .addGap(21, 21, 21)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jCheckBox1)
+                        .addComponent(jCheckCasado)
                         .addComponent(jLabel3))
                     .addGap(20, 20, 20)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jCheckBox4)
+                        .addComponent(jCheckHijos)
                         .addComponent(jLabel4))
                     .addContainerGap(104, Short.MAX_VALUE)))
         );
@@ -171,22 +176,28 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+    private void jCheckViveFueraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckViveFueraActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
+    }//GEN-LAST:event_jCheckViveFueraActionPerformed
 
-    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
+    private void jCheckTrabajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckTrabajaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox3ActionPerformed
+    }//GEN-LAST:event_jCheckTrabajaActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonSgtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSgtActionPerformed
                                         
         // TODO add your handling code here:
-        PantallaAcademica ventanaAcademica = new PantallaAcademica();
-        ventanaAcademica.setVisible(true);
-        this.setVisible(false);
+        if((jCheckViveFuera.isSelected()) || (jCheckCasado.isSelected()) || (jCheckHijos.isSelected()) || (jCheckTrabaja.isSelected())
+                || (jCheckImpedimento.isSelected())){
+            PantallaAcademica ventanaAcademica = new PantallaAcademica();
+            ventanaAcademica.setVisible(true);
+            this.setVisible(false);
+        }
+        else{
+            System.out.println("Seleccione al menos una opción para poder avanzar");
+        }
     
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonSgtActionPerformed
 
     /**
      * @param args the command line arguments
@@ -225,12 +236,12 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JButton jButtonSgt;
+    public static javax.swing.JCheckBox jCheckCasado;
+    public static javax.swing.JCheckBox jCheckHijos;
+    public static javax.swing.JCheckBox jCheckImpedimento;
+    public static javax.swing.JCheckBox jCheckTrabaja;
+    public static javax.swing.JCheckBox jCheckViveFuera;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
