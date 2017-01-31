@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -33,6 +35,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
+import jess.Fact;
+import jess.JessException;
 import jess.Rete;
 
 public class PantallaAcademica extends JFrame implements ActionListener {
@@ -123,9 +127,11 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         lista_materias_old = new HashMap();
         try {
             while (rs.next()) {
-                lista_materias_old.put(rs.getString(2), rs.getString(3) + ", " + rs.getString(4));
-
+                lista_materias_old.put(rs.getString(2), rs.getString(1) + ", " + rs.getString(4) + ", " + rs.getString(3));
+                
             }
+            System.out.println(lista_materias_old.toString());
+
         } catch (SQLException | HeadlessException e) {
             System.out.println(e);
         }
@@ -278,8 +284,9 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                 agregarNombre();
                 mensaje.setText("Se agregó un nuevo elemento");
             } else {
+
+                lista_materias_new.put(campo.getText(), "4,Si,Si,F");
                 agregarNombre();
-                lista_materias_new.put(campo.getText(), "falta info");
                 mensaje.setText("Materia nueva mas datos");
             }
         }
@@ -369,19 +376,149 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
         }
         if (evento.getSource() == siguiente) {
-             Rete jess = new Rete();
+            PruebaConexion x = new PruebaConexion();
+            ResultSet rs = null;
+            String cadena = "";
+            x.estableceConexion();
+
+            Rete jess = new Rete();
             this.setVisible(false);
             HashMap lista_materias_escogidas = new HashMap();
+            HashMap lista_materias_escogidas_new = new HashMap();
             for (int i = 0; i < listaMateriasDeseables.getModel().getSize(); i++) {
                 String item = (String) listaMateriasDeseables.getModel().getElementAt(i);
                 System.out.println("Item = " + item);
                 if (lista_materias_old.containsKey(item)) {
                     lista_materias_escogidas.put(item, lista_materias_old.get(item));
+                } else if (lista_materias_new.containsKey(item)) {
+                    lista_materias_escogidas_new.put(item, lista_materias_new.get(item));
+
                 } else {
                     System.out.println("error en parseo de valores");
                 }
             }
-            
+            HashMap lista_materias_repro = new HashMap();
+            for (int i = 0; i < listaMateriasReprobadas.getModel().getSize(); i++) {
+                String item = (String) listaMateriasReprobadas.getModel().getElementAt(i);
+                Map valores = new HashMap();
+                valores.put("nombre", item);
+                ResultSet rss = null;
+                rss = x.selectRegistro("public", "materias_reprobadas", valores);
+                try {
+                    boolean ban = true;
+                    while (rss.next()) {
+                        ban = false;
+                        Map valoretem = new HashMap();
+                        valoretem.put("numero", Integer.parseInt(rss.getString(2)) + 1);
+                        int id = Integer.parseInt(rss.getString(1));
+                        x.updateRegistro("public", "materias_reprobadas", id, valoretem);
+                        lista_materias_repro.put(item, Integer.parseInt(rss.getString(2)) + 1);
+                    }
+                    if (ban) {
+                        Map valoretem = new HashMap();
+                        valoretem.put("numero", 1);
+                        valoretem.put("nombre", item);
+                        x.insertRegistro("public", "materias_reprobadas", valoretem);
+                        lista_materias_repro.put(item, 1);
+
+                    }
+                } catch (SQLException e) {
+                    System.out.println(e);
+                    System.out.println("kkk.k");
+                }
+            }
+            try {
+                jess.batch("..//template//templates.clp");
+                jess.batch("..//rules//reglas_peso_materia_nueva.clp");
+                Iterator ite = lista_materias_escogidas_new.entrySet().iterator();
+                jess.reset();
+                while (ite.hasNext()) {
+                    Map.Entry e = (Map.Entry) ite.next();
+                    String val = (String) e.getValue();
+                    String values[] = val.split(",");
+                    String asserts = "(Materia (NombreMat " + e.getKey() + ")" + "(Creditos " + values[0] + ")" + "(Flujo " + values[1] + ")" + "(Proyecto " + values[2] + ")" + "(Tipo " + values[3] + "))";
+                    System.out.println(asserts);
+                    jess.assertString(asserts);
+
+                }
+                jess.run();
+                Iterator it = jess.listFacts();
+                while (it.hasNext()) {
+                    Fact dd = (Fact) it.next();
+                    String nombre = dd.getName();
+
+                    if (nombre.contains("Materia_Peso")) {
+                        System.out.println(dd.toString());
+                        Map valores = new HashMap();
+                        valores.put("nombre", dd.getSlotValue("NombreMat"));
+                        valores.put("dificultad", dd.getSlotValue("Peso"));
+                        valores.put("tipo", dd.getSlotValue("Tipo"));
+                        boolean u = false;
+                        u = x.insertRegistro("public", "materias", valores);
+                        lista_materias_escogidas.put(dd.getSlotValue("NombreMat"), "1," + dd.getSlotValue("Peso") + ',' + dd.getSlotValue("Tipo"));
+
+                    }
+                }
+                jess.clear();
+                jess.batch("..//template//templates.clp");
+                jess.batch("..//rules//reglas_peso_final.clp");
+                Iterator iteold = lista_materias_escogidas.entrySet().iterator();
+                jess.reset();
+                while (iteold.hasNext()) {
+                    Map.Entry e = (Map.Entry) iteold.next();
+                    String val = (String) e.getValue();
+                    String values[] = val.split(",");
+                    String asserts = "(Materias_Posibles (NombreMat " + e.getKey() + ")" + "(Peso " + values[1] + ")" + "(Tipo " + values[2] + "))";
+                    System.out.println(asserts);
+                    jess.assertString(asserts);
+
+                }
+                Iterator iterep = lista_materias_repro.entrySet().iterator();
+                while (iterep.hasNext()) {
+                    Map.Entry e = (Map.Entry) iterep.next();
+                    String val = e.getValue().toString();
+                    String values[] = val.split(",");
+                    String asserts = "(Materia_Repro (NombreMat " + e.getKey() + ")" + "(Numero " + values[0] + "))";
+                    System.out.println(asserts);
+                    jess.assertString(asserts);
+                }
+                int numeroest = 0;
+                ResultSet rss = x.selectRegistro("public", "numero_estudiantes", null);
+                try {
+                    boolean ban = true;
+                    while (rss.next()) {
+                        ban = false;
+                        Map valoretem = new HashMap();
+                        valoretem.put("numero", Integer.parseInt(rss.getString(2)) + 1);
+                        int id = Integer.parseInt(rss.getString(1));
+                        x.updateRegistro("public", "numero_estudiantes", id, valoretem);
+                        numeroest = Integer.parseInt(rss.getString(2)) + 1;
+                    }
+                    if (ban) {
+                        Map valoretem = new HashMap();
+                        valoretem.put("numero", 1);
+                        x.insertRegistro("public", "numero_estudiantes", valoretem);
+                        numeroest = 1;
+
+                    }
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
+                String asserts = "(Numero_Estudiantes (Numero " + numeroest + "))";
+                System.out.println(asserts);
+                jess.assertString(asserts);
+                jess.run();
+                it = jess.listFacts();
+                while (it.hasNext()) {
+                    Fact dd = (Fact) it.next();
+                    String nombre = dd.getName();
+                    System.out.println(dd.toString());
+
+                }
+
+            } catch (JessException ex) {
+                Logger.getLogger(PantallaAcademica.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         }
         //ventanaActExtra.setVisible(true);

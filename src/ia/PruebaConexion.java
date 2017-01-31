@@ -1,10 +1,8 @@
 package ia;
 //Importaciones
-import java.awt.HeadlessException;
 import java.sql.*;
 import java.util.Iterator;
 import java.util.Map;
-import javax.swing.JOptionPane;
 
 public class PruebaConexion {
 
@@ -36,7 +34,6 @@ public class PruebaConexion {
         ResultSet rs = null;
         Statement s = null;
         String query = "";
-        boolean res = false;
         if (values == null) {
             query = "select * from  " + SCHEMA + "." + Table;
 
@@ -59,6 +56,7 @@ public class PruebaConexion {
             s = conexion.createStatement();
             rs = s.executeQuery(query);
         } catch (SQLException e) {
+            System.out.println("ooooooooooooo");
             System.out.println(e);
         }
         return rs;
@@ -123,18 +121,22 @@ public class PruebaConexion {
         }
     }
 
-     public static void main(String[] args) throws SQLException {
-PruebaConexion con;
-            con = new PruebaConexion();
-            con.estableceConexion();
-            ResultSet rs=null;
-            rs=con.selectRegistro("public","materias",null);
-            System.out.println(rs);
-            String cadena="";
+    /* public static void main(String[] args) throws SQLException {
+     PruebaConexion x = new PruebaConexion();
+     ResultSet rs = null;
+     String cadena = "";
+
+     x.estableceConexion();
+     Map valores = new HashMap();
+     valores.put("nombre", "jhb");
+     valores.put("dificultad", "9");
+     valores.put("tipo", "lij");
+     boolean u = x.insertRegistro("public", "materias", valores);
+     u = x.updateRegistro("public", "materias", 1, valores);
      try {
-     while (rs.next()) {
+     while (u) {
      //imprimimos todos los datos contenidos en la tabla
-     cadena += rs.getString(1) + ", " + rs.getString(2) + ", " + rs.getString(3) + ", " + rs.getString(4) + "\n";
+     cadena += rs.getString(1) + ", " + rs.getString(2) + ", " + rs.getString(3) + ", " + rs.getString(4) + " , " + rs.getString(5) + "\n";
 
      }
 
@@ -142,6 +144,6 @@ PruebaConexion con;
      } catch (SQLException | HeadlessException e) {
      System.out.println(e);
      }
-     con.cierraConexion();
-     }
+     x.cierraConexion();
+     }*/
 }
