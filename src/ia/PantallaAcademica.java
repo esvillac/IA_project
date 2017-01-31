@@ -459,7 +459,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
                     }
                 }
-                jess.clear();
+                jess.clear(); 
                 jess.batch("..//template//templates.clp");
                 jess.batch("..//rules//reglas_peso_final.clp");
                 Iterator iteold = lista_materias_escogidas.entrySet().iterator();
