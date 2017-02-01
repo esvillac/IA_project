@@ -19,7 +19,7 @@ public class PruebaConexion {
         try {
             Class.forName("org.postgresql.Driver");
             //Establecemos el Usuario y la contraseña
-            conexion = DriverManager.getConnection(url, "postgres", "awesome6");
+            conexion = DriverManager.getConnection(url, "postgres", "8326653669a");
             if (conexion != null) {
                 System.out.println("Conexión a base de datos ... Ok");
             }

@@ -65,17 +65,11 @@
 )
 (deffacts Hechos
 	(Estudiante
-				(Nombre Juan bert)
+				(Nombre Jordy German)
 				(Promedio 8.4)
 				(NivelEst 4)
 				(Reprobado No)
 				(Atenuantes No)
-	)
-	(Materias_Posibles_Cojer
-				(Nombre Juan bert)
-				(Formativas 4)
-				(Optativas 2)
-				(Libre_Opcion 3)
 	)
 
 )

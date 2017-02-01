@@ -33,10 +33,9 @@
 		)
 	)
  =>
-        (bind ?Total (- 10 ?Peso)) 
 	(assert (Materia_Final_Peso
 		(NombreMat $?NombreMat)
-		(Peso ?Total)
+		(Peso ?Peso)
 		(Tipo ?Tipo)
 		)
 	)

@@ -254,22 +254,3 @@
 		)
 	)
 )
-(defrule Poner_Peso_Materia_Nueva_Exist
-			(Materia 
-				(NombreMat $?NombreMat) 
-			)
-			(Materia_Peso 
-				(NombreMat $?NombreMat) 
-				(Peso ?Peso)
-				(Tipo ?Tipo)
-
-			)
- =>
-	(assert (Materias_Posibles
-		(NombreMat $?NombreMat)
-		(Peso ?Peso)
-		(Tipo ?Tipo)
-		)
-	)
-)
-
