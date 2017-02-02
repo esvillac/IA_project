@@ -68,6 +68,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     private String materiaElimnarSelec;
     private HashMap lista_materias_old = new HashMap();
     private HashMap lista_materias_new = new HashMap();
+    private HashMap lista_veces_mat_rep = new HashMap();
     JRadioButton jRB_si_flujo = new JRadioButton("SI");
     JRadioButton jRB_no_flujo = new JRadioButton("NO");
     JRadioButton jRB_si_proyecto = new JRadioButton("SI");
@@ -326,7 +327,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
         }
         if (evento.getSource() == agregarMateriasReprobadas) {
-            verificaMateriaExiste(listaMaterias, listaMateriasReprobadas, modeloReprobadas);
+            verificaMateriaExisteRepro(listaMaterias, listaMateriasReprobadas, modeloReprobadas);
 
         }
         if (evento.getSource() == agregarMateriasDeseables) {
@@ -337,6 +338,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
             PruebaConexion x = new PruebaConexion();
             ResultSet rs = null;
             String cadena = "";
+            int tamListRepro = 0;
             x.estableceConexion();
 
             Rete jess = new Rete();
@@ -356,11 +358,18 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                 }
             }
             HashMap lista_materias_repro = new HashMap();
+            HashMap listaF_materias_veces_repro = new HashMap();
             for (int i = 0; i < listaMateriasReprobadas.getModel().getSize(); i++) {
                 String item = (String) listaMateriasReprobadas.getModel().getElementAt(i);
                 Map valores = new HashMap();
                 valores.put("nombre", item);
                 ResultSet rss = null;
+                int veces_repro = 0;
+                if(lista_veces_mat_rep.containsKey(item)){
+                    veces_repro = Integer.parseInt(lista_veces_mat_rep.get(item).toString());
+                    listaF_materias_veces_repro.put(item, veces_repro);//lista definitiva con las materias reprobadas más las veces que se ha tomado/reprobado
+                }
+                
                 rss = x.selectRegistro("public", "materias_reprobadas", valores);
                 try {
                     boolean ban = true;
@@ -384,9 +393,11 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                     System.out.println(e);
                     System.out.println("kkk.k");
                 }
+                tamListRepro = lista_materias_repro.size();
             }
             try {
                 jess.batch("..//template//templates.clp");
+                jess.batch("..//rules//reglas_peso_materias_reprobadas.clp");
                 jess.batch("..//rules//reglas_peso_materia_nueva.clp");
                 Iterator ite = lista_materias_escogidas_new.entrySet().iterator();
                 jess.reset();
@@ -399,8 +410,26 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                     jess.assertString(asserts);
 
                 }
+                
+                String assertsRepro = "(Numero_Repro (NombreEst Jordy German)(Numero "+tamListRepro+"))"; //Numero de materias que el estudiante ha reprobado
+                System.out.println(assertsRepro);
+                jess.assertString(assertsRepro);
+                
+                Iterator it_mat_repro = listaF_materias_veces_repro.entrySet().iterator();
+                while(it_mat_repro.hasNext()){//Asserts de las materias reprobadas más las veces que ha sido tomada/reprobada
+                     Map.Entry e = (Map.Entry) it_mat_repro.next();
+                     String veces = e.getValue().toString();
+                     String materia = e.getKey().toString();
+                     String assert_mat_veces = "(Veces_Materia_Reprobada (NombreEst Jordy German)(MatRepro "+ materia+")" + "(Veces "+veces+"))";
+                     System.out.println(assert_mat_veces);
+                     jess.assertString(assert_mat_veces);
+                }
+                                
                 jess.run();
+                HashMap pesoF_reprobada = new HashMap();
+                int maxValue = 0;
                 Iterator it = jess.listFacts();
+                int i=0;
                 while (it.hasNext()) {
                     Fact dd = (Fact) it.next();
                     String nombre = dd.getName();
@@ -416,8 +445,28 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                         lista_materias_escogidas.put(dd.getSlotValue("NombreMat"), "1," + dd.getSlotValue("Peso") + ',' + dd.getSlotValue("Tipo"));
 
                     }
+                    if(nombre.contains("Peso_Repro")){//Peso_repro determinado segun la cantidad de materias que ha reprobado considerando aquellas por 2da vez
+                        i++;
+                        System.out.println("Peso_Repro");
+                        System.out.println(dd.toString());
+                        System.out.println(dd.getSlotValue("Peso"));
+                        pesoF_reprobada.put(i, dd.getSlotValue("Peso"));
+                    }
+                    
+                    
                 }
+                Iterator it_pesoF_repro = pesoF_reprobada.entrySet().iterator();
+                while(it_pesoF_repro.hasNext()){
+                     Map.Entry e = (Map.Entry) it_pesoF_repro.next();
+                     int valor = Integer.parseInt(e.getValue().toString());
+                     if(valor > maxValue) {
+                        maxValue = valor;
+                        
+                    }
+                }
+                System.out.println("Max Peso Materias Repro: "+maxValue);//PESO FINAL de peso materias repro
 
+                
                 jess.clear();
                 jess.batch("..//template//templates.clp");
                 jess.batch("..//rules//reglas.clp");
@@ -542,7 +591,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     }
 
     private void display() {
-        String[] tipos = {"Formativa", "Optativa", "Libre Opcion"};
+        String[] tipos = {"F", "OP", "LB"};
         comboTipos = new JComboBox<>(tipos);
         JTextField nombreMat = new JTextField(campo.getText(), 20);
         JPanel panel = new JPanel(new GridLayout(0, 1));
@@ -592,17 +641,39 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         JPTipo.add(JPCombo);
         panel.add(JPTipo);
 
-        UIManager.put("OptionPane.minimumSize", new Dimension(370, 400));
+        //UIManager.put("OptionPane.minimumSize", new Dimension(370, 400));
         int result = JOptionPane.showConfirmDialog(null, panel, "INGRESAR NUEVA MATERIA",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             if ((jRB_si_proyecto.isSelected() || jRB_no_proyecto.isSelected()) && (jRB_si_flujo.isSelected() || jRB_no_flujo.isSelected())
                     && !(nombreMat.getText().isEmpty())) {
-                lista_materias_new.put(nombreMat.getText(), spinnerCreditos.getValue().toString() + ",Si,Si," + comboTipos.getSelectedItem().toString());///Corregir "4,Si,Si,F"
+                
+                if(jRB_si_flujo.isSelected() && jRB_si_proyecto.isSelected()){
+                    lista_materias_new.put(nombreMat.getText(), spinnerCreditos.getValue().toString() + ",Si,Si," + comboTipos.getSelectedItem().toString());///Corregir "4,Si,Si,F"
+                    System.out.println("Si,Si");
+                }
+                    
+                if(jRB_no_flujo.isSelected() && jRB_no_proyecto.isSelected()){
+                    lista_materias_new.put(nombreMat.getText(), spinnerCreditos.getValue().toString() + ",No,No," + comboTipos.getSelectedItem().toString());
+                    System.out.println("No,No");
+                }
+                    
+                if(jRB_si_flujo.isSelected() && jRB_no_proyecto.isSelected()){
+                    lista_materias_new.put(nombreMat.getText(), spinnerCreditos.getValue().toString() + ",Si,No," + comboTipos.getSelectedItem().toString());
+                    System.out.println("Si,No");
+                }
+                    
+                if(jRB_no_flujo.isSelected() && jRB_si_proyecto.isSelected()){
+                    lista_materias_new.put(nombreMat.getText(), spinnerCreditos.getValue().toString() + ",No,Si," + comboTipos.getSelectedItem().toString());
+                    System.out.println("No,Si");
+                }
+                    
+                
                 agregarNombre();//
                 mensaje.setText("Materia nueva");
             } else {
                 System.out.println("Llene todos los campos");
+                JOptionPane.showMessageDialog(null,"Llene todos los campos!!", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE); //Tipo de mensaje
                 display();
             }
             System.out.println(nombreMat.getText()
@@ -654,7 +725,73 @@ public class PantallaAcademica extends JFrame implements ActionListener {
             }
         }
     }
+    
+    private void verificaMateriaExisteRepro(JList listaMaterias, JList listaMateriasCategoria, DefaultListModel modelo) {
+        if (listaMaterias.getSelectedIndex() != -1) {
+            boolean existe = false;
+            String materiaSeleccionada = listaMaterias.getSelectedValue().toString();
+            if (listaMateriasCategoria.getModel().getSize() != 0) {//
+                for (int i = 0; i < listaMateriasCategoria.getModel().getSize(); i++) {//
+                    Object item = listaMateriasCategoria.getModel().getElementAt(i);//
+                    System.out.println("Item = " + item);
+                    if (item.equals(materiaSeleccionada)) {
+                        System.out.println("Ya existe");
+                        existe = true;
+                        break;
+                    }
+                }
+                if (existe == false) {
+                   displayMateriaReprobada(materiaSeleccionada, listaMateriasCategoria, modelo);
+                  
+                }
 
+            } else {
+                displayMateriaReprobada(materiaSeleccionada, listaMateriasCategoria, modelo);
+                //modelo.addElement(listaMaterias.getSelectedValue().toString());
+                //listaMateriasCategoria.setModel(modelo);//
+            }
+        }
+    }
+    
+    private void displayMateriaReprobada(Object item, JList listaMateriasCategoria, DefaultListModel modelo) {
+        JTextField nombreMat = new JTextField(item.toString(), 20);
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        JPanel panelFlujo = new JPanel();
+        JPanel panelProyecto = new JPanel();
+        JPanel JPCombo = new JPanel();
+        JPanel JPNombre = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        int min = 1;
+        int max = 2;
+        int step = 1;
+        int initValue = 1;
+        SpinnerModel modelSpin = new SpinnerNumberModel(initValue, min, max, step);
+        JSpinner spinnerVecesTomadas = new JSpinner(modelSpin);
+
+        JPNombre.add(new JLabel("NOMBRE:"));
+        JPNombre.add(Box.createHorizontalStrut(27));
+        JPNombre.add(nombreMat);
+        panel.add(JPNombre);
+
+        JPanel JPVecesTomadas = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPVecesTomadas.add(new JLabel("VECES REPRO:"));
+        JPVecesTomadas.add(Box.createHorizontalStrut(20));
+        JPVecesTomadas.add(spinnerVecesTomadas);
+        panel.add(JPVecesTomadas);
+
+        //UIManager.put("OptionPane.minimumSize", new Dimension(370, 400));
+        int result = JOptionPane.showConfirmDialog(null, panel, "INGRESAR MATERIA REPROBADA",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            System.out.println(nombreMat.getText()
+                    + " Veces tomada: " + spinnerVecesTomadas.getValue().toString());
+            modelo.addElement(listaMaterias.getSelectedValue().toString());
+            listaMateriasCategoria.setModel(modelo);
+            lista_veces_mat_rep.put(nombreMat.getText(), spinnerVecesTomadas.getValue().toString());
+        } else {
+            System.out.println("Cancelled");
+        }
+    }
+    
     private void eliminarMateriaItemActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         if (materiaElimnarSelec.equals("listaMaterias")) {

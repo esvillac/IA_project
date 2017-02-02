@@ -6,6 +6,7 @@
 package ia;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -229,6 +230,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         }
         else{
             System.out.println("LLene todos los campos");
+            JOptionPane.showMessageDialog(null,"Llene todos los campos!!", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE); //Tipo de mensaje
         }
          
     if(rb_experto.isSelected()==true)

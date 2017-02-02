@@ -46,6 +46,19 @@
 	 (slot Peso)
 	 (slot Tipo)
 )
+(deftemplate Veces_Materia_Reprobada
+        (multislot NombreEst)
+	(multislot MatRepro)
+	 (slot Veces)
+)
+(deftemplate Numero_Repro
+         (multislot NombreEst)     
+	 (slot Numero)
+)
+
+(deftemplate Peso_Repro
+	 (slot Peso)
+)
 (deftemplate Numero_Estudiantes
 	(slot Numero)
 )
@@ -68,11 +81,11 @@
 )
 (deffacts Hechos
 	(Estudiante
-				(Nombre Jordy German)
-				(Promedio 8.4)
-				(NivelEst 4)
-				(Reprobado No)
-				(Atenuantes No)
+            (Nombre Jordy German)
+            (Promedio 8.4)
+            (NivelEst 4)
+            (Reprobado No)
+            (Atenuantes No)
 	)
 
 )
