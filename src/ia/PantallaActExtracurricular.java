@@ -5,8 +5,21 @@
  */
 package ia;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
-
+import jess.Fact;
+import jess.JessException;
+import jess.Rete;
 /**
  *
  * @author Sixto Castro
@@ -16,11 +29,17 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
     /**
      * Creates new form Ventana_Act_Extracurricular
      */
+    private List<JCheckBox> checkboxes = new ArrayList<JCheckBox>();
+    int total;
     public PantallaActExtracurricular() {
         initComponents();
         /*pone la ventana en el Centro de la pantalla*/
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       
+        jButtonSgt.addActionListener(new buttonListener());
+      
+      
     }
 
     /**
@@ -54,6 +73,7 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
         jLabel5.setText("ACTIVIDADES EXTRACURRICULARES");
 
         jCheckViveFuera.setBackground(new java.awt.Color(180, 233, 163));
+        jCheckViveFuera.setName("vivefuera"); // NOI18N
         jCheckViveFuera.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckViveFueraActionPerformed(evt);
@@ -61,6 +81,7 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
         });
 
         jCheckTrabaja.setBackground(new java.awt.Color(180, 233, 163));
+        jCheckTrabaja.setName("trabaja"); // NOI18N
         jCheckTrabaja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckTrabajaActionPerformed(evt);
@@ -68,6 +89,12 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
         });
 
         jCheckHijos.setBackground(new java.awt.Color(180, 233, 163));
+        jCheckHijos.setName("hijos"); // NOI18N
+        jCheckHijos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckHijosActionPerformed(evt);
+            }
+        });
 
         jButtonSgt.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButtonSgt.setText("Siguiente");
@@ -90,11 +117,18 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
         jLabel4.setText("¿Tiene hijo(s)?");
 
         jCheckCasado.setBackground(new java.awt.Color(180, 233, 163));
+        jCheckCasado.setName("casado"); // NOI18N
+        jCheckCasado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckCasadoActionPerformed(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         jLabel6.setText("¿Tiene algún impedimento físico?");
 
         jCheckImpedimento.setBackground(new java.awt.Color(180, 233, 163));
+        jCheckImpedimento.setName("impedimento"); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -177,16 +211,18 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCheckViveFueraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckViveFueraActionPerformed
-        // TODO add your handling code here:
+       checkboxes.add(jCheckViveFuera);
     }//GEN-LAST:event_jCheckViveFueraActionPerformed
 
     private void jCheckTrabajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckTrabajaActionPerformed
         // TODO add your handling code here:
+       
+        checkboxes.add(jCheckTrabaja);
+  
     }//GEN-LAST:event_jCheckTrabajaActionPerformed
 
     private void jButtonSgtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSgtActionPerformed
-                                        
-        // TODO add your handling code here:
+                             
         if((jCheckViveFuera.isSelected()) || (jCheckCasado.isSelected()) || (jCheckHijos.isSelected()) || (jCheckTrabaja.isSelected())
                 || (jCheckImpedimento.isSelected())){
             PantallaAcademica ventanaAcademica = new PantallaAcademica();
@@ -195,13 +231,62 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
         }
         else{
             System.out.println("Seleccione al menos una opción para poder avanzar");
-        }
+        } 
     
     }//GEN-LAST:event_jButtonSgtActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void jCheckCasadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckCasadoActionPerformed
+        checkboxes.add(jCheckCasado);
+        
+    }//GEN-LAST:event_jCheckCasadoActionPerformed
+
+    private void jCheckHijosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckHijosActionPerformed
+         checkboxes.add(jCheckHijos);
+    }//GEN-LAST:event_jCheckHijosActionPerformed
+  class buttonListener implements ActionListener {
+      Rete jess = new Rete();
+      @Override
+      public void actionPerformed(ActionEvent e) {
+         for (JCheckBox checkBox : checkboxes) {
+            if (checkBox.isSelected()) {
+               if(checkBox.getName().equals("vivefuera")) 
+                 total=total+1;
+               else if(checkBox.getName().equals("trabaja")) 
+                 total=total+3;
+                
+                else if(checkBox.getName().equals("casado")) 
+                
+                   total=total+1;
+               
+                else if(checkBox.getName().equals("hijos")) 
+                
+                   total=total+3;
+               else if(checkBox.getName().equals("impedimento")) 
+                
+                   total=total+2;
+            }
+               
+            }
+         System.out.println("El peso de las actividades extracurriculares es"+ total);
+          try {
+              jess.batch("..//template//templates.CLP");
+              jess.reset();
+              String asserts = "(Actividades_Extracurriculares(Peso_ActividadesExtra "+total+"))";
+              System.out.println(asserts);
+              jess.assertString(asserts);
+              jess.run();
+              Iterator it = jess.listFacts();
+                while (it.hasNext()) {
+                    Fact dd = (Fact) it.next();
+                    String nombre = dd.getName();
+                    System.out.println(dd.toString());
+
+                }
+          } catch (JessException ex) {
+                Logger.getLogger(PantallaAcademica.class.getName()).log(Level.SEVERE, null, ex);
+            }
+         }
+} 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -234,6 +319,7 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
             }
         });
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonSgt;

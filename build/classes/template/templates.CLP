@@ -49,6 +49,9 @@
 (deftemplate Numero_Estudiantes
 	(slot Numero)
 )
+(deftemplate Actividades_Extracurriculares
+	(slot Peso_ActividadesExtra)
+)
 (deftemplate Numero_Formativas
 	(slot Numero)
 )
