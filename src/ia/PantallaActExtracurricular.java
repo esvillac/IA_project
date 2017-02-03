@@ -65,6 +65,7 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
         jCheckCasado = new javax.swing.JCheckBox();
         jLabel6 = new javax.swing.JLabel();
         jCheckImpedimento = new javax.swing.JCheckBox();
+        jButtonAtras = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -130,9 +131,17 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
 
         jCheckImpedimento.setBackground(new java.awt.Color(180, 233, 163));
         jCheckImpedimento.setName("impedimento"); // NOI18N
-        jCheckImpedimento.addActionListener(new java.awt.event.ActionListener() {
+		jCheckImpedimento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckImpedimentoActionPerformed(evt);
+            }
+        });
+
+        jButtonAtras.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jButtonAtras.setText("Atrás");
+        jButtonAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAtrasActionPerformed(evt);
             }
         });
 
@@ -143,16 +152,20 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(54, Short.MAX_VALUE)
+                        .addContainerGap(69, Short.MAX_VALUE)
                         .addComponent(jLabel5))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(59, 59, 59)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButtonSgt)
-                            .addComponent(jLabel6))
+                        .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jCheckImpedimento)))
                 .addGap(61, 61, 61))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(74, 74, 74)
+                .addComponent(jButtonAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonSgt)
+                .addGap(74, 74, 74))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(61, 61, 61)
@@ -174,12 +187,14 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 199, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 194, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jCheckImpedimento))
-                .addGap(28, 28, 28)
-                .addComponent(jButtonSgt)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jCheckImpedimento, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(33, 33, 33)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonSgt)
+                    .addComponent(jButtonAtras))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -250,10 +265,17 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
     private void jCheckHijosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckHijosActionPerformed
          checkboxes.add(jCheckHijos);
     }//GEN-LAST:event_jCheckHijosActionPerformed
-
-    private void jCheckImpedimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckImpedimentoActionPerformed
+	
+	private void jCheckImpedimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckImpedimentoActionPerformed
          checkboxes.add(jCheckImpedimento);
     }//GEN-LAST:event_jCheckImpedimentoActionPerformed
+	
+    private void jButtonAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAtrasActionPerformed
+        // TODO add your handling code here:
+        PantallaPrincipal ventanaPantallaPrincipal = new PantallaPrincipal();
+        ventanaPantallaPrincipal.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButtonAtrasActionPerformed
   class buttonListener implements ActionListener {
       Rete jess = new Rete();
       @Override
@@ -333,6 +355,7 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAtras;
     private javax.swing.JButton jButtonSgt;
     public static javax.swing.JCheckBox jCheckCasado;
     public static javax.swing.JCheckBox jCheckHijos;

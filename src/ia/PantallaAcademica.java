@@ -6,10 +6,12 @@
 package ia;
 
 import com.mxrck.autocompleter.TextAutoCompleter;
+import ia.PantallaActExtracurricular.buttonListener;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.color.CMMException;
@@ -54,7 +56,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
     private Container contenedor;/*declaramos el contenedor*/
 
-    private JButton agregar, siguiente, agregarMateriasSemestre, agregarMateriasReprobadas, agregarMateriasDeseables;
+    private JButton agregar, siguiente, atras, agregarMateriasSemestre, agregarMateriasReprobadas, agregarMateriasDeseables;
     private JLabel mensaje, agregarPromedio, materias_d, materias_r, materias_s;/*declaramos el objeto Label*/
 
     private JTextField campo, promedio;
@@ -89,7 +91,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         /*Asigna un titulo a la barra de titulo*/
         setTitle("Actividad Academica");
         /*tamaño de la ventana*/
-        setSize(800, 550);
+        setSize(750, 550);
         /*pone la ventana en el Centro de la pantalla*/
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,35 +105,43 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
         contenedor.setLayout(null);
         campo = new JTextField();
-        campo.setBounds(20, 80, 135, 23);
+        campo.setBounds(20, 50, 135, 23);
         agregar = new JButton();
         agregar.setText("Agregar materia");
-        agregar.setBounds(160, 80, 150, 23);
+        agregar.setBounds(160, 50, 150, 23);
         siguiente = new JButton();
-        siguiente.setText("Recomendacion");
-        siguiente.setBounds(580, 440, 150, 23);
+        siguiente.setText("RECOMENDAR");
+        siguiente.setFont(new Font("default", Font.BOLD, 16));
+        siguiente.setBounds(430, 470, 180, 23);
+        
+        atras = new JButton();
+        atras.setText("ATRÁS");
+        atras.setFont(new Font("default", Font.BOLD, 16));
+        atras.setBounds(135, 470, 150, 23);
+        
         agregar.addActionListener(this);
         siguiente.addActionListener(this);
-        agregarPromedio = new JLabel("Ingresar promedio semestral");
-        materias_d = new JLabel("Materias que podria coger");
+        atras.addActionListener(this);
+        //agregarPromedio = new JLabel("Ingresar promedio semestral");
+        materias_d = new JLabel("Materias disponibles próximo semestre");
         materias_r = new JLabel("Materias reprobadas en semestre anterior");
         materias_s = new JLabel("Materias registradas en semestre anterior");
 
         materias_d.setBounds(420, 50, 280, 23);
-        materias_r.setBounds(420, 225, 280, 23);
-        materias_s.setBounds(20, 300, 280, 23);
-        agregarPromedio.setBounds(150, 20, 280, 23);
-        promedio = new JTextField();
-        promedio.setBounds(380, 20, 135, 23);
+        materias_r.setBounds(420, 245, 280, 23);
+        materias_s.setBounds(20, 275, 280, 23);
+        //agregarPromedio.setBounds(150, 20, 280, 23);
+        //promedio = new JTextField();
+        //promedio.setBounds(380, 20, 135, 23);
 
         agregarMateriasSemestre = new JButton();
         agregarMateriasSemestre.setText("+");
-        agregarMateriasSemestre.setBounds(20, 270, 50, 23);
+        agregarMateriasSemestre.setBounds(20, 245, 50, 23);
         agregarMateriasSemestre.addActionListener(this);
 
         agregarMateriasDeseables = new JButton();
         agregarMateriasDeseables.setText("+");
-        agregarMateriasDeseables.setBounds(310, 120, 50, 23);
+        agregarMateriasDeseables.setBounds(310, 110, 50, 23);
         agregarMateriasDeseables.addActionListener(this);
 
         agregarMateriasReprobadas = new JButton();
@@ -139,7 +149,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         agregarMateriasReprobadas.setBounds(310, 245, 50, 23);
         agregarMateriasReprobadas.addActionListener(this);
         mensaje = new JLabel();
-        mensaje.setBounds(20, 250, 280, 23);
+        mensaje.setBounds(20, 220, 280, 23);
 
         //instanciamos la lista
         listaMaterias = new JList();
@@ -262,24 +272,25 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         scrollLista2 = new JScrollPane();
         scrollLista3 = new JScrollPane();
         scrollLista4 = new JScrollPane();
-        scrollLista.setBounds(20, 120, 290, 150);
+        scrollLista.setBounds(20, 85, 290, 155);
         scrollLista.setViewportView(listaMaterias);
-        scrollLista2.setBounds(20, 325, 240, 150);
+        scrollLista2.setBounds(20, 300, 290, 150);
         scrollLista2.setViewportView(listaMateriasSemetresAnterior);
-        scrollLista3.setBounds(420, 75, 240, 150);
+        scrollLista3.setBounds(420, 75, 290, 150);
         scrollLista3.setViewportView(listaMateriasDeseables);
-        scrollLista4.setBounds(420, 250, 240, 150);
+        scrollLista4.setBounds(420, 275, 290, 150);
         scrollLista4.setViewportView(listaMateriasReprobadas);
         Color colorVerde = new Color(180, 233, 163);
         /*Agregamos los componentes al Contenedor*/
         contenedor.add(campo);
         contenedor.add(agregar);
-        contenedor.add(promedio);
-        contenedor.add(agregarPromedio);
+        //contenedor.add(promedio);
+        //contenedor.add(agregarPromedio);
         contenedor.add(agregarMateriasSemestre);
         contenedor.add(agregarMateriasDeseables);
         contenedor.add(agregarMateriasReprobadas);
         contenedor.add(siguiente);
+        contenedor.add(atras);
         contenedor.add(mensaje);
         contenedor.add(materias_d);
         contenedor.add(materias_r);
@@ -323,27 +334,33 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                     display();
                 }
 
-//                lista_materias_new.put(campo.getText(), "4,Si,Si,F");///Corregir
-//                //agregarNombre();//
-//                mensaje.setText("Materia nueva mas datos");
+
             }
         }
 
         if (evento.getSource() == agregarMateriasSemestre) {
            
-                displayMateriaSemestreAnterior(listaMaterias);
-            
+            displayMateriaSemestreAnterior(listaMaterias);
             verificaMateriaExiste(listaMaterias, listaMateriasSemetresAnterior, modeloSemestre);
 
         }
+        
         if (evento.getSource() == agregarMateriasReprobadas) {
             verificaMateriaExisteRepro(listaMaterias, listaMateriasReprobadas, modeloReprobadas);
 
         }
+        
         if (evento.getSource() == agregarMateriasDeseables) {
             verificaMateriaExiste(listaMaterias, listaMateriasDeseables, modeloDeseables);
 
         }
+        
+        if (evento.getSource() == atras) {
+            PantallaActExtracurricular ventanaActExtracurricular = new PantallaActExtracurricular();
+            ventanaActExtracurricular.setVisible(true);
+            this.setVisible(false);
+        }
+        
         if (evento.getSource() == siguiente) {
             PruebaConexion x = new PruebaConexion();
             ResultSet rs = null;
@@ -353,6 +370,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
             Rete jess = new Rete();
             this.setVisible(false);
+            
             HashMap lista_materias_escogidas = new HashMap();
             HashMap lista_materias_escogidas_new = new HashMap();
             for (int i = 0; i < listaMateriasDeseables.getModel().getSize(); i++) {
@@ -558,9 +576,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                     String resultado = dd.toString();
                     System.out.println(resultado);
                     String values [];
-                    String materias [];
-                    String materia;
-                    
+                                       
                     if (nombre.contains("Materias_Resultado")) {
                         values=resultado.split("\\(");
                         System.out.println("Resultado-> "+values[2]+" "+values[3]+" "+values[4]);
