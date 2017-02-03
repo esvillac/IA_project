@@ -130,6 +130,11 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
 
         jCheckImpedimento.setBackground(new java.awt.Color(180, 233, 163));
         jCheckImpedimento.setName("impedimento"); // NOI18N
+        jCheckImpedimento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckImpedimentoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -138,7 +143,7 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(50, Short.MAX_VALUE)
+                        .addContainerGap(54, Short.MAX_VALUE)
                         .addComponent(jLabel5))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(59, 59, 59)
@@ -169,11 +174,11 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 194, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 199, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jCheckImpedimento, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(33, 33, 33)
+                    .addComponent(jLabel6)
+                    .addComponent(jCheckImpedimento))
+                .addGap(28, 28, 28)
                 .addComponent(jButtonSgt)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -245,6 +250,10 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
     private void jCheckHijosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckHijosActionPerformed
          checkboxes.add(jCheckHijos);
     }//GEN-LAST:event_jCheckHijosActionPerformed
+
+    private void jCheckImpedimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckImpedimentoActionPerformed
+         checkboxes.add(jCheckImpedimento);
+    }//GEN-LAST:event_jCheckImpedimentoActionPerformed
   class buttonListener implements ActionListener {
       Rete jess = new Rete();
       @Override
