@@ -75,7 +75,14 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     JRadioButton jRB_no_proyecto = new JRadioButton("NO");
     JComboBox<String> comboTipos;
     boolean materia_nueva_existe = false;
-
+    public static String formativas;
+    public static String optativas;
+    public static String libreOp;
+    public static ArrayList<String> materiasResultFormativa;
+    public static ArrayList<String> materiasResultOptativa;
+    public static ArrayList<String> materiasResultLibreOpc;
+    
+    
     public PantallaAcademica() {
         /*permite iniciar las propiedades de los componentes*/
         iniciarComponentes();
@@ -548,13 +555,47 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                 while (it.hasNext()) {
                     Fact dd = (Fact) it.next();
                     String nombre = dd.getName();
-                    System.out.println(dd.toString());
+                    String resultado = dd.toString();
+                    System.out.println(resultado);
+                    String values [];
+                    String materias [];
+                    String materia;
+                    
+                    if (nombre.contains("Materias_Resultado")) {
+                        values=resultado.split("\\(");
+                        System.out.println("Resultado-> "+values[2]+" "+values[3]+" "+values[4]);
+                        if(values[2].contains("Formativas")){
+                            materiasResultFormativa = new ArrayList<>();
+                            obtieneMateriasPorTipo2(values[2], "Formativas", materiasResultFormativa);
+//                            formativas = obtieneMateriasPorTipo(values[2], "Formativas");
+//                            formativas = formativas.replaceFirst(", ", "");
+//                            materias = formativas.split(",");
+//                            for(int j=0; j<materias.length; j++){
+//                                materia = materias[j];
+//                                materiasResultFormativa.add(materia);
+//                            }
+
+                        }
+                        if(values[3].contains("Optativas")){
+                            materiasResultOptativa = new ArrayList<>();
+                            //optativas = obtieneMateriasPorTipo(values[3], "Optativas");
+                            obtieneMateriasPorTipo2(values[3], "Optativas", materiasResultOptativa);
+                        }
+                        if(values[4].contains("LibreOpcion")){
+                            //libreOp = obtieneMateriasPorTipo(values[4], "LibreOpcion");
+                            materiasResultLibreOpc = new ArrayList<>();
+                            obtieneMateriasPorTipo2(values[4], "LibreOpcion", materiasResultLibreOpc);
+                        }
+                    }
 
                 }
 
             } catch (JessException ex) {
                 Logger.getLogger(PantallaAcademica.class.getName()).log(Level.SEVERE, null, ex);
             }
+            ResultadoMaterias ventanaResultados = new ResultadoMaterias();
+            ventanaResultados.setVisible(true);
+            this.setVisible(false);
 
         }
         //ventanaActExtra.setVisible(true);
@@ -686,6 +727,34 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         }
     }
 
+    
+    private String obtieneMateriasPorTipo(String value , String tipo){
+           String MateriasTipo = value.split(tipo)[1];
+           //System.out.println(MateriasTipo);
+           MateriasTipo = MateriasTipo.replace(")","");
+           System.out.println(MateriasTipo);
+           return MateriasTipo;
+       
+   }
+   
+   private ArrayList<String> obtieneMateriasPorTipo2(String value , String tipo, ArrayList<String> materiasResult){
+           String materias []; 
+           String materia;
+           String MateriasTipo = value.split(tipo)[1];
+           //System.out.println(MateriasTipo);
+           MateriasTipo = MateriasTipo.replace(")","");
+           MateriasTipo = MateriasTipo.replaceFirst(", ", "");
+           System.out.println(MateriasTipo);
+           materias = MateriasTipo.split(",");
+           
+           for(int j=0; j<materias.length; j++){
+                materia = materias[j];
+                materiasResult.add(materia);
+           }
+           return materiasResult;
+       
+   }
+    
     private void eliminarNombre(int indice) {
         if (indice >= 0) {
             modelo.removeElementAt(indice);

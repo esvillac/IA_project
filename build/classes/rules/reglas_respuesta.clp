@@ -44,7 +44,7 @@
 	(bind ?TotalF (- ?NumeroF 1))
 	(modify ?Materias_R (Numero ?TotalF)) 
 	(modify ?Materias_Result 
-				(Formativas $?Formativas $?NombreMat)
+				(Formativas $?Formativas , $?NombreMat)
 	)
 	(retract ?Materias_Delete) 
 	
@@ -95,7 +95,7 @@
 	(bind ?TotalF (- ?NumeroOP 1))
 	(modify ?Materias_R (Numero ?TotalF)) 
 	(modify ?Materias_Result 
-				(Optativas $?Optativas $?NombreMat)
+				(Optativas $?Optativas , $?NombreMat)
 	)
 	(retract ?Materias_Delete) 
 	
@@ -146,7 +146,7 @@
 	(bind ?TotalF (- ?NumeroLB 1))
 	(modify ?Materias_R (Numero ?TotalF)) 
 	(modify ?Materias_Result 
-				(LibreOpcion $?LibreOpcion $?NombreMat)
+				(LibreOpcion $?LibreOpcion , $?NombreMat)
 	)
 	(retract ?Materias_Delete) 
 	
