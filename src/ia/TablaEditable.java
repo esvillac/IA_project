@@ -17,7 +17,7 @@ import javax.swing.table.TableCellEditor;
  *
  * @author edgar-pc
  */
-public class MyTableCellEditor extends AbstractCellEditor implements TableCellEditor{
+public class TablaEditable extends AbstractCellEditor implements TableCellEditor{
 
     private PruebaConexion db;
     private String OldValue=""; //Valor antiguo de la celda
@@ -26,7 +26,7 @@ public class MyTableCellEditor extends AbstractCellEditor implements TableCellEd
     private String ID="";// Llave del registro
     private JComponent component = new JTextField();
 
-    public MyTableCellEditor(PruebaConexion db, String NameColumn)
+    public TablaEditable(PruebaConexion db, String NameColumn)
     {
             this.db = db;
             this.NameColum = NameColumn;

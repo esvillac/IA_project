@@ -32,9 +32,9 @@ private PruebaConexion db = new PruebaConexion();
         jTable1.getTableHeader().getColumnModel().getColumn(0).setMaxWidth(0);
         jTable1.getTableHeader().getColumnModel().getColumn(0).setMinWidth(0);
         //editor de caldas
-        jTable1.getColumnModel().getColumn( 1 ).setCellEditor(new MyTableCellEditor(db,"nombre"));//Columna Nombre
-        jTable1.getColumnModel().getColumn( 2 ).setCellEditor(new MyTableCellEditor(db,"dificultad"));//Columna Apellido
-        jTable1.getColumnModel().getColumn( 3 ).setCellEditor(new MyTableCellEditor(db,"tipo"));//Columna Edad
+        jTable1.getColumnModel().getColumn( 1 ).setCellEditor(new TablaEditable(db,"nombre"));//Columna Nombre
+        jTable1.getColumnModel().getColumn( 2 ).setCellEditor(new TablaEditable(db,"dificultad"));//Columna Apellido
+        jTable1.getColumnModel().getColumn( 3 ).setCellEditor(new TablaEditable(db,"tipo"));//Columna Edad
     }
   
      private void Actualizar_Tabla(){

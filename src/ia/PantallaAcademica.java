@@ -198,7 +198,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                         materiaElimnarSelec = "listaMateriasSemetresAnterior";
                         int index = list.locationToIndex(evt.getPoint());
                         String nombre = listaMateriasSemetresAnterior.getModel().getElementAt(index).toString();
-                        System.out.println(nombre);
+            
                         jPopupMenu1.show(list, evt.getX(), evt.getY());
                         indexMenuItem = index;
 
@@ -323,6 +323,9 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         }
 
         if (evento.getSource() == agregarMateriasSemestre) {
+           
+                displayMateriaSemestreAnterior(listaMaterias);
+            
             verificaMateriaExiste(listaMaterias, listaMateriasSemetresAnterior, modeloSemestre);
 
         }
@@ -751,6 +754,56 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                 //listaMateriasCategoria.setModel(modelo);//
             }
         }
+    }
+      
+    private void displayMateriaSemestreAnterior(JList listaMaterias) {
+        String materiaSeleccionada = listaMaterias.getSelectedValue().toString();
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        int total=0,n_encuestados=0,dificultad=0;
+        int min = 1;
+        int max = 5;
+        int step = 1;
+        int initValue = 1;
+        SpinnerModel modelSpin = new SpinnerNumberModel(initValue, min, max, step);
+        JSpinner spinnerValor = new JSpinner(modelSpin);
+        PruebaConexion con;
+        int newPromedio = 0; 
+   
+        con = new PruebaConexion();
+        con.estableceConexion();
+        Map valores = new HashMap();
+        valores.put("nombre", materiaSeleccionada);
+        ResultSet rss = null;
+        rss = con.selectRegistro("public", "materias", valores);
+        JPanel JPDificultad = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPDificultad.add(new JLabel("Dificultad:"));
+        JPDificultad.add(Box.createHorizontalStrut(20));
+        JPDificultad.add(spinnerValor);
+        panel.add(JPDificultad);
+        //UIManager.put("OptionPane.minimumSize", new Dimension(370, 400));
+        int result = JOptionPane.showConfirmDialog(null, panel, "INGRESAR DIFICULTAD",JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                if (rss.next()) {
+                total = Integer.parseInt(rss.getString("total"));
+                n_encuestados = Integer.parseInt(rss.getString("n_encuestados"));
+                dificultad = Integer.parseInt(spinnerValor.getValue().toString());
+                n_encuestados++;
+                newPromedio=(total+dificultad)/(n_encuestados);
+                Map valoretem = new HashMap();
+                valoretem.put("dificultad",newPromedio);
+                valoretem.put("total",total+dificultad);
+                valoretem.put("n_encuestados",n_encuestados);
+                con.updateRegistro("public", "materias", Integer.parseInt(rss.getString("id")), valoretem);
+            }
+            }catch (SQLException ex) {
+                Logger.getLogger(PantallaAcademica.class.getName()).log(Level.SEVERE, null, ex);
+            }
+       
+        } else {
+            System.out.println("Cancelled");
+        }
+       
     }
     
     private void displayMateriaReprobada(Object item, JList listaMateriasCategoria, DefaultListModel modelo) {
