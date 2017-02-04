@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -842,7 +843,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     }
       
     private void displayMateriaSemestreAnterior(JList listaMaterias) {
-        String materiaSeleccionada = listaMaterias.getSelectedValue().toString();
+          String materiaSeleccionada = listaMaterias.getSelectedValue().toString();
         JPanel panel = new JPanel(new GridLayout(0, 1));
         int total=0,n_encuestados=0,dificultad=0;
         int min = 1;
@@ -852,10 +853,10 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         SpinnerModel modelSpin = new SpinnerNumberModel(initValue, min, max, step);
         JSpinner spinnerValor = new JSpinner(modelSpin);
         PruebaConexion con;
-        int newPromedio = 0; 
-   
+        float newPromedio = 0;
         con = new PruebaConexion();
         con.estableceConexion();
+        
         Map valores = new HashMap();
         valores.put("nombre", materiaSeleccionada);
         ResultSet rss = null;
@@ -874,9 +875,10 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                 n_encuestados = Integer.parseInt(rss.getString("n_encuestados"));
                 dificultad = Integer.parseInt(spinnerValor.getValue().toString());
                 n_encuestados++;
-                newPromedio=(total+dificultad)/(n_encuestados);
+                newPromedio=(float)(total+dificultad)/(float)(n_encuestados);
+                String promedio = String.format(Locale.ROOT, "%.2f", newPromedio);
                 Map valoretem = new HashMap();
-                valoretem.put("dificultad",newPromedio);
+                valoretem.put("dificultad",promedio);
                 valoretem.put("total",total+dificultad);
                 valoretem.put("n_encuestados",n_encuestados);
                 con.updateRegistro("public", "materias", Integer.parseInt(rss.getString("id")), valoretem);
@@ -888,7 +890,6 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         } else {
             System.out.println("Cancelled");
         }
-       
     }
     
     private void displayMateriaReprobada(Object item, JList listaMateriasCategoria, DefaultListModel modelo) {
