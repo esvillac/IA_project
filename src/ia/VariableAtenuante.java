@@ -28,7 +28,7 @@ public class VariableAtenuante extends Variable_Difusa{
         m = (a + b) / 2;
         this.rangos_funcion.put("Dificil", new MembresiaTriangular(b, a, m));
         a = 6.5f;
-        b = 10f;
+        b = 10f;//cambios
         m = (a + b) / 2;
         this.rangos_funcion.put("Muy Dificil", new MembresiaTriangular(b, a, m));
     }
