@@ -79,6 +79,23 @@
 	(multislot Optativas)
 	(multislot LibreOpcion)
 )
+(deftemplate Peso_Reprobado
+	(multislot Peso)
+	(slot CF)
+)
+
+(deftemplate Peso_Atenuantes
+	(multislot Peso)
+	(slot CF)
+)
+(deftemplate Peso_Promedio
+	(multislot Peso)
+	(slot CF)
+)
+(deftemplate RespuestaDifusa
+	(multislot Categoria)
+	(slot CF)
+)
 (deffacts Hechos
 	(Estudiante
             (Nombre Jordy German)

@@ -10,6 +10,9 @@
 		(Tipo F) 
 	)
 	(or
+                (and
+			(test (>= ?Peso 6))		
+		)
 		(and
 			(test (< ?Peso 6))
 			(test (>= ?Peso 5))		
@@ -61,6 +64,9 @@
 		(Tipo OP) 
 	)
 	(or
+                (and
+			(test (>= ?Peso 6))		
+		)
 		(and
 			(test (< ?Peso 6))
 			(test (>= ?Peso 5))		
@@ -112,6 +118,9 @@
 		(Tipo LB) 
 	)
 	(or
+                (and
+			(test (>= ?Peso 6))		
+		)
 		(and
 			(test (< ?Peso 6))
 			(test (>= ?Peso 5))		

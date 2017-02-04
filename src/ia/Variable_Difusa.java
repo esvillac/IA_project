@@ -17,9 +17,8 @@ public class Variable_Difusa {
 
     HashMap rangos_funcion = new HashMap();
 
+    public Variable_Difusa() {
 
-    public Variable_Difusa( ) {
-        
     }
 
     public HashMap EvaluarRango(float valor) {
@@ -29,7 +28,10 @@ public class Variable_Difusa {
             Map.Entry e = (Map.Entry) it.next();
             Membresia mem = (Membresia) e.getValue();
             float val = mem.calculaMembresia(valor);
-            rangos_valor.put(e.getKey(), val);
+            if (val > 0) {
+                rangos_valor.put(e.getKey(), val);
+            }
+
         }
         return rangos_valor;
     }
