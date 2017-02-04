@@ -14,6 +14,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
+import java.awt.Image;
 import java.awt.color.CMMException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,12 +25,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 
 import javax.swing.DefaultListModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -95,7 +100,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         /*Asigna un titulo a la barra de titulo*/
         setTitle("Actividad Academica");
         /*tamaño de la ventana*/
-        setSize(750, 550);
+        setSize(840, 550);
         /*pone la ventana en el Centro de la pantalla*/
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -109,14 +114,14 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
         contenedor.setLayout(null);
         filtrar_materia = new JLabel();
-        filtrar_materia.setBounds(20, 25, 100, 20);
+        filtrar_materia.setBounds(20, 25, 150, 20);
         filtrar_materia.setText("Filtrar materia: ");
         
         campo = new JTextField();
         campo.setBounds(20, 50, 135, 23);
         agregar = new JButton();
-        agregar.setText("Agregar materia");
-        agregar.setBounds(160, 50, 150, 23);
+        agregar.setText("Nueva materia");
+        agregar.setBounds(210, 50, 150, 23);
         siguiente = new JButton();
         siguiente.setText("RECOMENDAR");
         siguiente.setFont(new Font("default", Font.BOLD, 16));
@@ -135,26 +140,22 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         materias_r = new JLabel("Materias reprobadas en semestre anterior");
         materias_s = new JLabel("Materias registradas en semestre anterior");
 
-        materias_d.setBounds(420, 50, 280, 23);
-        materias_r.setBounds(420, 245, 280, 23);
-        materias_s.setBounds(20, 275, 280, 23);
-        //agregarPromedio.setBounds(150, 20, 280, 23);
-        //promedio = new JTextField();
-        //promedio.setBounds(380, 20, 135, 23);
-
+        materias_d.setBounds(450, 30, 280, 23);
+        materias_r.setBounds(450, 220, 330, 23);
+        materias_s.setBounds(20, 275, 330, 23);
         agregarMateriasSemestre = new JButton();
-        agregarMateriasSemestre.setText("+");
+        agregarMateriasSemestre.setText("+"); 
         agregarMateriasSemestre.setBounds(20, 245, 50, 23);
         agregarMateriasSemestre.addActionListener(this);
 
         agregarMateriasDeseables = new JButton();
         agregarMateriasDeseables.setText("+");
-        agregarMateriasDeseables.setBounds(310, 85, 50, 23);
+        agregarMateriasDeseables.setBounds(360, 85, 50, 23);
         agregarMateriasDeseables.addActionListener(this);
 
         agregarMateriasReprobadas = new JButton();
         agregarMateriasReprobadas.setText("+");
-        agregarMateriasReprobadas.setBounds(310, 245, 50, 23);
+        agregarMateriasReprobadas.setBounds(360, 245, 50, 23);
         agregarMateriasReprobadas.addActionListener(this);
         mensaje = new JLabel();
         mensaje.setBounds(90, 250, 280, 23);
@@ -295,13 +296,13 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         scrollLista2 = new JScrollPane();
         scrollLista3 = new JScrollPane();
         scrollLista4 = new JScrollPane();
-        scrollLista.setBounds(20, 85, 290, 160);
+        scrollLista.setBounds(20, 85, 340, 160);
         scrollLista.setViewportView(listaMaterias);
-        scrollLista2.setBounds(20, 300, 290, 150);
+        scrollLista2.setBounds(20, 300, 340, 150);
         scrollLista2.setViewportView(listaMateriasSemetresAnterior);
-        scrollLista3.setBounds(420, 75, 290, 150);
+        scrollLista3.setBounds(450, 55, 340, 150);
         scrollLista3.setViewportView(listaMateriasDeseables);
-        scrollLista4.setBounds(420, 275, 290, 150);
+        scrollLista4.setBounds(450, 247, 340, 150);
         scrollLista4.setViewportView(listaMateriasReprobadas);
         Color colorVerde = new Color(180, 233, 163);
         /*Agregamos los componentes al Contenedor*/
@@ -913,6 +914,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         String materiaSeleccionada = listaMaterias.getSelectedValue().toString();
         JPanel panel = new JPanel(new GridLayout(0, 1));
         int total=0,n_encuestados=0,dificultad=0;
+        String promedio;
         int min = 1;
         int max = 5;
         int step = 1;
@@ -920,7 +922,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         SpinnerModel modelSpin = new SpinnerNumberModel(initValue, min, max, step);
         JSpinner spinnerValor = new JSpinner(modelSpin);
         PruebaConexion con;
-        int newPromedio = 0; 
+        float newPromedio = 0; 
    
         con = new PruebaConexion();
         con.estableceConexion();
@@ -942,9 +944,10 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                 n_encuestados = Integer.parseInt(rss.getString("n_encuestados"));
                 dificultad = Integer.parseInt(spinnerValor.getValue().toString());
                 n_encuestados++;
-                newPromedio=(total+dificultad)/(n_encuestados);
+                newPromedio=(float)(total+dificultad)/(float)(n_encuestados);
+                promedio = String.format(Locale.ROOT, "%.2f", newPromedio);
                 Map valoretem = new HashMap();
-                valoretem.put("dificultad",newPromedio);
+                valoretem.put("dificultad",promedio);
                 valoretem.put("total",total+dificultad);
                 valoretem.put("n_encuestados",n_encuestados);
                 con.updateRegistro("public", "materias", Integer.parseInt(rss.getString("id")), valoretem);
