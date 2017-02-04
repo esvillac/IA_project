@@ -252,7 +252,7 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
         }
         else{
             System.out.println("Seleccione al menos una opción para poder avanzar");
-            JOptionPane.showMessageDialog(null,"Seleccione al menos una opción para poder avanzar!!", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE); //Tipo de mensaje
+            JOptionPane.showMessageDialog(null,"Seleccione al menos una opción para poder continuar!!", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE); //Tipo de mensaje
         } 
     
     }//GEN-LAST:event_jButtonSgtActionPerformed

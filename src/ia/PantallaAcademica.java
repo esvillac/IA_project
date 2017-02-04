@@ -47,7 +47,10 @@ import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.Timer;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import jess.Fact;
 import jess.JessException;
 import jess.Rete;
@@ -57,12 +60,12 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     private Container contenedor;/*declaramos el contenedor*/
 
     private JButton agregar, siguiente, atras, agregarMateriasSemestre, agregarMateriasReprobadas, agregarMateriasDeseables;
-    private JLabel mensaje, agregarPromedio, materias_d, materias_r, materias_s;/*declaramos el objeto Label*/
+    private JLabel mensaje, agregarPromedio, materias_d, materias_r, materias_s, filtrar_materia;/*declaramos el objeto Label*/
 
     private JTextField campo, promedio;
     private JList listaMaterias, listaMateriasSemetresAnterior, listaMateriasReprobadas, listaMateriasDeseables;
     private DefaultListModel modelo, modeloReprobadas, modeloSemestre, modeloDeseables;/*declaramos el Modelo*/
-
+    private JTextField nombreMatPopUp;
     private JScrollPane scrollLista, scrollLista2, scrollLista3, scrollLista4;
     private JPopupMenu jPopupMenu1;
     private int indexMenuItem = 0;
@@ -80,6 +83,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     public static String formativas;
     public static String optativas;
     public static String libreOp;
+    public static ArrayList<String> listadoMaterias;
     public static ArrayList<String> materiasResultFormativa;
     public static ArrayList<String> materiasResultOptativa;
     public static ArrayList<String> materiasResultLibreOpc;
@@ -104,6 +108,10 @@ public class PantallaAcademica extends JFrame implements ActionListener {
          * de los componentes*/
 
         contenedor.setLayout(null);
+        filtrar_materia = new JLabel();
+        filtrar_materia.setBounds(20, 25, 100, 20);
+        filtrar_materia.setText("Filtrar materia: ");
+        
         campo = new JTextField();
         campo.setBounds(20, 50, 135, 23);
         agregar = new JButton();
@@ -141,7 +149,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
         agregarMateriasDeseables = new JButton();
         agregarMateriasDeseables.setText("+");
-        agregarMateriasDeseables.setBounds(310, 110, 50, 23);
+        agregarMateriasDeseables.setBounds(310, 85, 50, 23);
         agregarMateriasDeseables.addActionListener(this);
 
         agregarMateriasReprobadas = new JButton();
@@ -149,7 +157,8 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         agregarMateriasReprobadas.setBounds(310, 245, 50, 23);
         agregarMateriasReprobadas.addActionListener(this);
         mensaje = new JLabel();
-        mensaje.setBounds(20, 220, 280, 23);
+        mensaje.setBounds(90, 250, 280, 23);
+        
 
         //instanciamos la lista
         listaMaterias = new JList();
@@ -160,18 +169,31 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         rs = con.selectRegistro("public", "materias", null);
         System.out.println(rs);
         lista_materias_old = new HashMap();
+        listadoMaterias = new ArrayList<>();
+        modelo = new DefaultListModel();
         try {
             while (rs.next()) {
                 lista_materias_old.put(rs.getString(2), rs.getString(1) + "," + rs.getString(4) + "," + rs.getString(3));
-
+                modelo.addElement(rs.getString(2));
+                listadoMaterias.add(rs.getString(2));
             }
+            listaMaterias.setModel(modelo);
             System.out.println(lista_materias_old.toString());
 
         } catch (SQLException | HeadlessException e) {
             System.out.println(e);
         }
         con.cierraConexion();
-        setmaterias(lista_materias_old);
+        //setmaterias(lista_materias_old);
+        campo.getDocument().addDocumentListener(new DocumentListener(){
+            @Override public void insertUpdate(DocumentEvent e) { filter(); }
+            @Override public void removeUpdate(DocumentEvent e) { filter(); }
+            @Override public void changedUpdate(DocumentEvent e) {}
+            private void filter() {
+                String filter = campo.getText();
+                filterModel(modelo, filter);
+            }
+        });
         listaMaterias.addMouseListener(new MouseAdapter() {
 
             public void mouseClicked(MouseEvent evt) {
@@ -200,6 +222,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         eliminarMateriaItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 eliminarMateriaItemActionPerformed(evt);
+                mensaje.setText("Se eliminó materia");
             }
         });
         jPopupMenu1.add(eliminarMateriaItem);
@@ -263,7 +286,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         });
 
         //instanciamos el modelo
-        modelo = new DefaultListModel();
+        //modelo = new DefaultListModel();
         modeloSemestre = new DefaultListModel();
         modeloDeseables = new DefaultListModel();
         modeloReprobadas = new DefaultListModel();
@@ -272,7 +295,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         scrollLista2 = new JScrollPane();
         scrollLista3 = new JScrollPane();
         scrollLista4 = new JScrollPane();
-        scrollLista.setBounds(20, 85, 290, 155);
+        scrollLista.setBounds(20, 85, 290, 160);
         scrollLista.setViewportView(listaMaterias);
         scrollLista2.setBounds(20, 300, 290, 150);
         scrollLista2.setViewportView(listaMateriasSemetresAnterior);
@@ -282,6 +305,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         scrollLista4.setViewportView(listaMateriasReprobadas);
         Color colorVerde = new Color(180, 233, 163);
         /*Agregamos los componentes al Contenedor*/
+        contenedor.add(filtrar_materia);
         contenedor.add(campo);
         contenedor.add(agregar);
         //contenedor.add(promedio);
@@ -300,6 +324,14 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         contenedor.add(scrollLista3);
         contenedor.add(scrollLista4);
         contenedor.setBackground(colorVerde);
+        Timer t = new Timer(5000, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mensaje.setText("");
+            }
+        });
+        t.start();
 
     }
 
@@ -650,10 +682,42 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
     }
 
+    private void agregarNombre2(String nombreMatPopUp) {
+        boolean existe = false;
+        String nombre = nombreMatPopUp;
+        int tam = listaMaterias.getModel().getSize();
+        if (tam != 0) {
+            for (int i = 0; i < tam; i++) {
+                String item = (String) listaMaterias.getModel().getElementAt(i);
+                System.out.println("Item = " + item);
+                if (item.equals(nombre)) {
+                    System.out.println(nombre + ": Ya existe");
+                    campo.setText("");
+                    existe = true;
+                    break;
+                }
+
+            }
+            if (existe == false) {
+                System.out.println(nombre + ": NO existe. La materia ha sido ingresada a la Lista");
+                modelo.addElement(nombre);
+                listaMaterias.setModel(modelo);
+                campo.setText("");
+
+            }
+
+        } else {
+            modelo.addElement(nombre);
+            listaMaterias.setModel(modelo);
+            campo.setText("");
+        }
+
+    }
+    
     private void display() {
         String[] tipos = {"F", "OP", "LB"};
         comboTipos = new JComboBox<>(tipos);
-        JTextField nombreMat = new JTextField(campo.getText(), 20);
+        nombreMatPopUp = new JTextField(campo.getText(), 20);
         JPanel panel = new JPanel(new GridLayout(0, 1));
         JPanel panelFlujo = new JPanel();
         JPanel panelProyecto = new JPanel();
@@ -668,7 +732,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
         JPNombre.add(new JLabel("NOMBRE:"));
         JPNombre.add(Box.createHorizontalStrut(27));
-        JPNombre.add(nombreMat);
+        JPNombre.add(nombreMatPopUp);
         panel.add(JPNombre);
 
         JPanel JPCredito = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -706,37 +770,41 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             if ((jRB_si_proyecto.isSelected() || jRB_no_proyecto.isSelected()) && (jRB_si_flujo.isSelected() || jRB_no_flujo.isSelected())
-                    && !(nombreMat.getText().isEmpty())) {
+                    && !(nombreMatPopUp.getText().isEmpty())) {
                 
                 if(jRB_si_flujo.isSelected() && jRB_si_proyecto.isSelected()){
-                    lista_materias_new.put(nombreMat.getText(), spinnerCreditos.getValue().toString() + ",Si,Si," + comboTipos.getSelectedItem().toString());///Corregir "4,Si,Si,F"
+                    lista_materias_new.put(nombreMatPopUp.getText(), spinnerCreditos.getValue().toString() + ",Si,Si," + comboTipos.getSelectedItem().toString());///Corregir "4,Si,Si,F"
+                    listadoMaterias.add(nombreMatPopUp.getText());
                     System.out.println("Si,Si");
                 }
                     
                 if(jRB_no_flujo.isSelected() && jRB_no_proyecto.isSelected()){
-                    lista_materias_new.put(nombreMat.getText(), spinnerCreditos.getValue().toString() + ",No,No," + comboTipos.getSelectedItem().toString());
+                    lista_materias_new.put(nombreMatPopUp.getText(), spinnerCreditos.getValue().toString() + ",No,No," + comboTipos.getSelectedItem().toString());
+                    listadoMaterias.add(nombreMatPopUp.getText());
                     System.out.println("No,No");
                 }
                     
                 if(jRB_si_flujo.isSelected() && jRB_no_proyecto.isSelected()){
-                    lista_materias_new.put(nombreMat.getText(), spinnerCreditos.getValue().toString() + ",Si,No," + comboTipos.getSelectedItem().toString());
+                    lista_materias_new.put(nombreMatPopUp.getText(), spinnerCreditos.getValue().toString() + ",Si,No," + comboTipos.getSelectedItem().toString());
+                    listadoMaterias.add(nombreMatPopUp.getText());
                     System.out.println("Si,No");
                 }
                     
                 if(jRB_no_flujo.isSelected() && jRB_si_proyecto.isSelected()){
-                    lista_materias_new.put(nombreMat.getText(), spinnerCreditos.getValue().toString() + ",No,Si," + comboTipos.getSelectedItem().toString());
+                    lista_materias_new.put(nombreMatPopUp.getText(), spinnerCreditos.getValue().toString() + ",No,Si," + comboTipos.getSelectedItem().toString());
+                    listadoMaterias.add(nombreMatPopUp.getText());
                     System.out.println("No,Si");
                 }
                     
                 
-                agregarNombre();//
+                agregarNombre2(nombreMatPopUp.getText());//
                 mensaje.setText("Materia nueva");
             } else {
                 System.out.println("Llene todos los campos");
                 JOptionPane.showMessageDialog(null,"Llene todos los campos!!", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE); //Tipo de mensaje
                 display();
             }
-            System.out.println(nombreMat.getText()
+            System.out.println(nombreMatPopUp.getText()
                     + " " + spinnerCreditos.getValue().toString());
         } else {
             System.out.println("Cancelled");
@@ -893,6 +961,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     
     private void displayMateriaReprobada(Object item, JList listaMateriasCategoria, DefaultListModel modelo) {
         JTextField nombreMat = new JTextField(item.toString(), 20);
+        nombreMat.setEnabled(false);
         JPanel panel = new JPanel(new GridLayout(0, 1));
         JPanel panelFlujo = new JPanel();
         JPanel panelProyecto = new JPanel();
@@ -911,7 +980,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         panel.add(JPNombre);
 
         JPanel JPVecesTomadas = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPVecesTomadas.add(new JLabel("VECES REPRO:"));
+        JPVecesTomadas.add(new JLabel("# REPRO:"));
         JPVecesTomadas.add(Box.createHorizontalStrut(20));
         JPVecesTomadas.add(spinnerVecesTomadas);
         panel.add(JPVecesTomadas);
@@ -944,6 +1013,22 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         if (materiaElimnarSelec.equals("listaMateriasSemetresAnterior")) {
             ((DefaultListModel) listaMateriasSemetresAnterior.getModel()).removeElementAt(indexMenuItem);
         }
+    }
+    
+    public void filterModel(DefaultListModel model, String filter) {
+        
+        DefaultListModel modeloF= new DefaultListModel();
+        for (String s : listadoMaterias) {
+            if (!s.toLowerCase().startsWith(filter)) {
+                //System.out.println("NO filtro");
+
+            } else {
+                //if (!model.contains(s)) {
+                    modeloF.addElement(s);
+                //}
+            }
+        }
+        listaMaterias.setModel(modeloF);
     }
 
 }

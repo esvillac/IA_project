@@ -148,14 +148,10 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(0, 24, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addGap(124, 124, 124))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(18, 18, 18)))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2))
+                .addGap(124, 124, 124)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextNivel, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextNombreEst, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -223,22 +219,32 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if(!(jTextNivel.getText().isEmpty()) && !(jTextNombreEst.getText().isEmpty()) && !(jTextProm.getText().isEmpty()) && (rb_estudiante.isSelected()==true)){
-            PantallaActExtracurricular ventanaAcademica = new PantallaActExtracurricular();
-            ventanaAcademica.setVisible(true);
-            this.setVisible(false);
+        if(!(jTextNivel.getText().isEmpty()) && !(jTextNombreEst.getText().isEmpty()) && !(jTextProm.getText().isEmpty()) && 
+                ((rb_estudiante.isSelected()==true)) || (rb_experto.isSelected()==true)){
+            try{
+                Float.parseFloat(jTextProm.getText().replace(',', '.'));
+                PantallaActExtracurricular ventanaAcademica = new PantallaActExtracurricular();
+                ventanaAcademica.setVisible(true);
+                this.setVisible(false);
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null,"Dato no valido. Ingrese un numero!!", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE);
+                
+            }
+            
+            
         }
         else{
             System.out.println("LLene todos los campos");
             JOptionPane.showMessageDialog(null,"Llene todos los campos!!", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE); //Tipo de mensaje
         }
          
-    if(rb_experto.isSelected()==true)
+        if(rb_experto.isSelected()==true)
 
-    {       PantallaExperto ventanaExperto = new PantallaExperto();
-        ventanaExperto.setVisible(true);
-        this.setVisible(false);
-    }
+        {       PantallaExperto ventanaExperto = new PantallaExperto();
+            ventanaExperto.setVisible(true);
+            this.setVisible(false);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextNivelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextNivelActionPerformed
