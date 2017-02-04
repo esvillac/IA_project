@@ -173,7 +173,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         modelo = new DefaultListModel();
         try {
             while (rs.next()) {
-                lista_materias_old.put(rs.getString(2), rs.getString(1) + "," + rs.getString(4) + "," + rs.getString(3));
+                lista_materias_old.put(rs.getString(2), rs.getString(1) + "," + rs.getString(3) + "," + rs.getString(4));
                 modelo.addElement(rs.getString(2));
                 listadoMaterias.add(rs.getString(2));
             }
