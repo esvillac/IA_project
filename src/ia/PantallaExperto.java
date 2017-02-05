@@ -5,6 +5,8 @@
  */
 package ia;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
@@ -36,7 +38,10 @@ private PruebaConexion db = new PruebaConexion();
         jTable1.getColumnModel().getColumn( 2 ).setCellEditor(new TablaEditable(db,"dificultad"));//Columna Apellido
         jTable1.getColumnModel().getColumn( 3 ).setCellEditor(new TablaEditable(db,"tipo"));//Columna Edad
     }
-  
+     public Image getIconImage() {
+        Image retValue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("images/IA_LOGO.png"));
+        return retValue;
+    }
      private void Actualizar_Tabla(){
         //actualiza los datos de la tabla realizando una consulta a la base de datos
         String[] columNames = {"Codigo" ,"Materia","Dificultad","Tipo"};        
@@ -60,6 +65,7 @@ private PruebaConexion db = new PruebaConexion();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(151, 220, 127));
+        setIconImage(getIconImage());
 
         jTable1.setBackground(new java.awt.Color(157, 204, 93));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(

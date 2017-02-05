@@ -15,7 +15,6 @@
 	) 
 (test (<= ?Formativas2 ?Formativas1))
 (test (<= ?Optativas2 ?Optativas1))
-(test (<= ?Libre_Opcion2 ?Libre_Opcion1))
  => 
 	(assert (Numero_Formativas
 				(Numero ?Formativas2)

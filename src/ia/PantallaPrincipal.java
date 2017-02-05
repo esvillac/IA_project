@@ -7,6 +7,8 @@ package ia;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import java.awt.Image;
+import java.awt.Toolkit;
 
 /**
  *
@@ -17,14 +19,20 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form PantallPrincipal
      */
-    public static double promedio=0;
-        public static String name="";
-          public static int nivel=0;
+    public static double promedio = 0;
+    public static String name = "";
+    public static int nivel = 0;
+
     public PantallaPrincipal() {
         initComponents();
         /*pone la ventana en el Centro de la pantalla*/
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public Image getIconImage() {
+        Image retValue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("images/IA_LOGO.png"));
+        return retValue;
     }
 
     /**
@@ -36,7 +44,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox1 = new javax.swing.JComboBox<String>();
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -53,10 +61,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         rb_experto = new javax.swing.JRadioButton();
         rb_estudiante = new javax.swing.JRadioButton();
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(138, 210, 162));
+        setIconImage(getIconImage());
 
         jPanel2.setBackground(new java.awt.Color(180, 233, 163));
 
@@ -222,31 +231,27 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if(!(jTextNivel.getText().isEmpty()) && !(jTextNombreEst.getText().isEmpty()) && !(jTextProm.getText().isEmpty()) && 
-                ((rb_estudiante.isSelected()==true)) || (rb_experto.isSelected()==true)){
-            try{
-                nivel=Integer.parseInt(jTextNivel.getText());
-                promedio=Float.parseFloat(jTextProm.getText().replace(',', '.'));
-                name=jTextNombreEst.getText();
+        if (!(jTextNivel.getText().isEmpty()) && !(jTextNombreEst.getText().isEmpty()) && !(jTextProm.getText().isEmpty())
+                && ((rb_estudiante.isSelected() == true)) || (rb_experto.isSelected() == true)) {
+            try {
+                nivel = Integer.parseInt(jTextNivel.getText());
+                promedio = Float.parseFloat(jTextProm.getText().replace(',', '.'));
+                name = jTextNombreEst.getText();
                 PantallaActExtracurricular ventanaAcademica = new PantallaActExtracurricular();
                 ventanaAcademica.setVisible(true);
                 this.setVisible(false);
-            }
-            catch(Exception e){
-                JOptionPane.showMessageDialog(null,"Dato no valido. Ingrese un numero!!", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE);
-                
-            }
-            
-            
-        }
-        else{
-            System.out.println("LLene todos los campos");
-            JOptionPane.showMessageDialog(null,"Llene todos los campos!!", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE); //Tipo de mensaje
-        }
-         
-        if(rb_experto.isSelected()==true)
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Dato no valido. Ingrese un numero!!", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE);
 
-        {       PantallaExperto ventanaExperto = new PantallaExperto();
+            }
+
+        } else {
+            System.out.println("LLene todos los campos");
+            JOptionPane.showMessageDialog(null, "Llene todos los campos!!", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE); //Tipo de mensaje
+        }
+
+        if (rb_experto.isSelected() == true) {
+            PantallaExperto ventanaExperto = new PantallaExperto();
             ventanaExperto.setVisible(true);
             this.setVisible(false);
         }
