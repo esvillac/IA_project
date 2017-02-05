@@ -636,7 +636,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                             obtieneMateriasPorTipo2(values[4], "LibreOpcion", materiasResultLibreOpc);
                         }
                     }
-
+ 
                 }
 
             } catch (JessException ex) {
