@@ -76,7 +76,8 @@ private PruebaConexion db = new PruebaConexion();
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setFont(new java.awt.Font("Century Schoolbook L", 1, 15)); // NOI18N
-        jButton1.setText("Volver");
+        jButton1.setText("Atras");
+        jButton1.setToolTipText("");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -109,7 +110,8 @@ private PruebaConexion db = new PruebaConexion();
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
       PantallaPrincipal pantallaPrincipal = new PantallaPrincipal();
-      pantallaPrincipal.setVisible(true);        // TODO add your handling code here:
+      pantallaPrincipal.setVisible(true);  
+      this.setVisible(false);      // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

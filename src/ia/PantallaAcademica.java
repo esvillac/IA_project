@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -144,18 +145,27 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         materias_r.setBounds(450, 220, 330, 23);
         materias_s.setBounds(20, 275, 330, 23);
         agregarMateriasSemestre = new JButton();
-        agregarMateriasSemestre.setText("+"); 
-        agregarMateriasSemestre.setBounds(20, 245, 50, 23);
+     
+        agregarMateriasSemestre.setBounds(20, 245, 25, 25);
         agregarMateriasSemestre.addActionListener(this);
+         Image img = null;
+        try {
+            img = ImageIO.read(getClass().getResource("add_image.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(PantallaAcademica.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           Image newimg = img.getScaledInstance( 25, 25,  java.awt.Image.SCALE_SMOOTH ) ;  
+
+        agregarMateriasSemestre.setIcon(new ImageIcon(newimg));
 
         agregarMateriasDeseables = new JButton();
-        agregarMateriasDeseables.setText("+");
-        agregarMateriasDeseables.setBounds(360, 85, 50, 23);
+        agregarMateriasDeseables.setIcon(new ImageIcon(newimg));
+        agregarMateriasDeseables.setBounds(360, 85, 25, 25);
         agregarMateriasDeseables.addActionListener(this);
 
         agregarMateriasReprobadas = new JButton();
-        agregarMateriasReprobadas.setText("+");
-        agregarMateriasReprobadas.setBounds(360, 245, 50, 23);
+        agregarMateriasReprobadas.setIcon(new ImageIcon(newimg));
+        agregarMateriasReprobadas.setBounds(360, 245, 25, 25);
         agregarMateriasReprobadas.addActionListener(this);
         mensaje = new JLabel();
         mensaje.setBounds(90, 250, 280, 23);
@@ -930,7 +940,11 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         valores.put("nombre", materiaSeleccionada);
         ResultSet rss = null;
         rss = con.selectRegistro("public", "materias", valores);
+        JPanel JPNombre = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel JPDificultad = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPNombre.add(new JLabel(materiaSeleccionada));
+        JPNombre.add(Box.createHorizontalStrut(27));
+        panel.add(JPNombre);
         JPDificultad.add(new JLabel("Dificultad:"));
         JPDificultad.add(Box.createHorizontalStrut(20));
         JPDificultad.add(spinnerValor);
