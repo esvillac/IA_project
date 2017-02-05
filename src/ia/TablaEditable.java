@@ -55,6 +55,10 @@ public class TablaEditable extends AbstractCellEditor implements TableCellEditor
                 JOptionPane.showMessageDialog(null,"Error: No se puede actualizar");
                 ((JTextField)component).setText(OldValue);
             }
+            else{
+                JOptionPane.showMessageDialog(null,"Actualizacion exitosa");
+
+            }
         }
         return super.stopCellEditing();
     }
