@@ -417,10 +417,12 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                     System.out.println("error en parseo de valores");
                 }
             }
-            HashMap lista_materias_repro = new HashMap();
+            HashMap lista_materias_reproBase = new HashMap();
+                    HashMap lista_materias_reproActual = new HashMap();
             HashMap listaF_materias_veces_repro = new HashMap();
             for (int i = 0; i < listaMateriasReprobadas.getModel().getSize(); i++) {
                 String item = (String) listaMateriasReprobadas.getModel().getElementAt(i);
+               // lista_materias_reproActual.put(item, campo);
                 Map valores = new HashMap();
                 valores.put("nombre", item);
                 ResultSet rss = null;
@@ -439,21 +441,21 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                         valoretem.put("numero", Integer.parseInt(rss.getString(2)) + 1);
                         int id = Integer.parseInt(rss.getString(1));
                         x.updateRegistro("public", "materias_reprobadas", id, valoretem);
-                        lista_materias_repro.put(item, Integer.parseInt(rss.getString(2)) + 1);
+                        lista_materias_reproBase.put(item, Integer.parseInt(rss.getString(2)) + 1);
                     }
                     if (ban) {
                         Map valoretem = new HashMap();
                         valoretem.put("numero", 1);
                         valoretem.put("nombre", item);
                         x.insertRegistro("public", "materias_reprobadas", valoretem);
-                        lista_materias_repro.put(item, 1);
+                        lista_materias_reproBase.put(item, 1);
 
                     }
                 } catch (SQLException e) {
                     System.out.println(e);
                     System.out.println("kkk.k");
                 }
-                tamListRepro = lista_materias_repro.size();
+                tamListRepro = lista_materias_reproBase.size();
             }
             try {
                 jess.batch("..//template//templates.clp");
@@ -566,7 +568,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                 String asserts2 = "(Materias_Posibles_Cojer (Nombre " + "Jordy German" + ")" + "(Formativas " + numero_formativas + ")" + "(Optativas " + numero_optativas + ")" + "(Libre_Opcion " + numero_libre_opcion + "))";
                 jess.assertString(asserts2);
                 System.out.println(asserts2);
-                Iterator iterep = lista_materias_repro.entrySet().iterator();
+                Iterator iterep = lista_materias_reproBase.entrySet().iterator();
                 while (iterep.hasNext()) {
                     Map.Entry e = (Map.Entry) iterep.next();
                     String val = e.getValue().toString();
