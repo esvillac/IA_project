@@ -18,19 +18,19 @@ public class VariableAtenuante extends Variable_Difusa{
         float a = 0;
         float b = 0;
         float m = (a + b) / 2;
-        this.rangos_funcion.put("Cero", new MembresiaTriangular(b, a, m));
+        this.rangos_funcion.put("No_Atenuantes", new MembresiaTriangular(b, a, m));
         a = 0f;
-        b = 4.5f;
+        b = 5f;
         m = (a + b) / 2;
         this.rangos_funcion.put("Regular", new MembresiaTriangular(b, a, m));
         a = 3.0f;
-        b = 7.0f;
+        b = 8.0f;
         m = (a + b) / 2;
         this.rangos_funcion.put("Dificil", new MembresiaTriangular(b, a, m));
-        a = 6.5f;
-        b = 10f;//cambios
+        a = 6f;
+        b = 11f;//cambios
         m = (a + b) / 2;
-        this.rangos_funcion.put("Muy Dificil", new MembresiaTriangular(b, a, m));
+        this.rangos_funcion.put("Muy_Dificil", new MembresiaTriangular(b, a, m));
     }
 
 

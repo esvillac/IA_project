@@ -1,5 +1,4 @@
 ;Reglas
-
 (defrule Regla1
 	(Peso_Reprobado 
 		(Peso Peligro) 
@@ -8,19 +7,19 @@
 	) 
 	 => 
 	(assert (RespuestaDifusa
-		(Categoria Peligro Prueba)
+		(Categoria Peligro_Prueba)
                 (CF ?N) 
 		)
 	) 
 ) 
 (defrule Regla2
 	(Peso_Atenuantes
-		(Peso Muy Dificil) 
+		(Peso Muy_Dificil) 
                 (CF ?N) 
 	) 
 	 => 
 	(assert (RespuestaDifusa
-		(Categoria Muy Facil)
+		(Categoria Muy_Facil)
                 (CF ?N) 
 		)
 	) 
@@ -33,375 +32,297 @@
 	) 
 	 => 
 	(assert (RespuestaDifusa
-		(Categoria Peligro Reprobadas)
+		(Categoria Peligro_Reprobadas)
                 (CF ?N) 
 		)
 	) 
 ) 
 (defrule Regla4
 	(Peso_Reprobado 
-		(Peso A Salvo) 
+		(Peso A_Salvo) 
+                (CF ?N1) 
 
 	) 
-	(or
-		(Peso_Atenuantes
-			(Peso No Atenuantes) 
-		) 
-		(Peso_Atenuantes
-			(Peso Regular) 
-		)
-	)
+	(Peso_Atenuantes
+            (Peso No_Atenuantes|Regular) 
+            (CF ?N2) 
+        ) 
 	(Peso_Promedio
 		(Peso Bajo) 
+                 (CF ?N3)
 	)
 	 => 
+        (bind ?Total (min ?N1 ?N2 ?N3) )
 	(assert (RespuestaDifusa
 		(Categoria Facil)
+                (CF ?Total)
 		)
 	) 
 ) 
 (defrule Regla5
 	(Peso_Reprobado 
-		(Peso A Salvo) 
+		(Peso A_Salvo) 
+                (CF ?N1) 
 
 	) 
 	(Peso_Atenuantes
-		(Peso No Atenuantes) 
+		(Peso No_Atenuantes) 
+                (CF ?N2) 
 	) 
 	(Peso_Promedio
 		(Peso Regular) 
+                (CF ?N3) 
 	)
 	 => 
+        (bind ?Total (min ?N1 ?N2 ?N3) )
 	(assert (RespuestaDifusa
 		(Categoria Regular)
+                (CF ?Total) 
 		)
 	) 
 ) 
 (defrule Regla6
 	(Peso_Reprobado 
-		(Peso A Salvo) 
+		(Peso A_Salvo) 
+                (CF ?N1) 
 
 	) 
 	(Peso_Atenuantes
-		(Peso No Atenuantes) 
+		(Peso No_Atenuantes) 
+                (CF ?N2) 
 	) 
 	(Peso_Promedio
 		(Peso Bueno) 
+                (CF ?N3) 
 	)
 	 => 
+        (bind ?Total (min ?N1 ?N2 ?N3) )
 	(assert (RespuestaDifusa
 		(Categoria Dificil)
+                (CF ?Total) 
 		)
 	) 
 ) 
 (defrule Regla7
 	(Peso_Reprobado 
-		(Peso A Salvo) 
-
+		(Peso A_Salvo) 
+                (CF ?N1) 
 	) 
 	(Peso_Atenuantes
-		(Peso No Atenuantes) 
+		(Peso No_Atenuantes) 
+                (CF ?N2) 
 	) 
 	(Peso_Promedio
-		(Peso Sobresaliente) 
+		(Peso Sobresaliente)
+                (CF ?N3)  
 	)
 	 => 
+        (bind ?Total (min ?N1 ?N2 ?N3) )
 	(assert (RespuestaDifusa
-		(Categoria Muy Dificil)
+		(Categoria Muy_Dificil)
+                (CF ?Total) 
 		)
 	) 
 ) 
 (defrule Regla8
 	(Peso_Reprobado 
-		(Peso A Salvo) 
+		(Peso A_Salvo) 
+                (CF ?N1) 
 
 	) 
 	(Peso_Atenuantes
 		(Peso Regular) 
+                (CF ?N2) 
 	) 
 	(Peso_Promedio
 		(Peso Regular) 
+                (CF ?N3) 
 	)
 	 => 
+        (bind ?Total (min ?N1 ?N2 ?N3) )
 	(assert (RespuestaDifusa
 		(Categoria Regular)
+                (CF ?Total) 
 		)
 	) 
 ) 
 (defrule Regla9
 	(Peso_Reprobado 
-		(Peso A Salvo) 
+		(Peso A_Salvo) 
+                (CF ?N1) 
 
 	) 
 	(Peso_Atenuantes
 		(Peso Regular) 
+                (CF ?N2) 
 	) 
-	(or
 		(Peso_Promedio
-			(Peso Regular) 
+			(Peso Regular|Sobresaliente) 
+                        (CF ?N3) 
 		)
-			(Peso_Promedio
-			(Peso Sobresaliente) 
-		)
-	)
+
 	 => 
+        (bind ?Total (min ?N1 ?N2 ?N3) )
 	(assert (RespuestaDifusa
 		(Categoria Normal)
+                        (CF ?Total) 
 		)
 	) 
 ) 
 (defrule Regla10
 	(Peso_Reprobado 
-		(Peso A Salvo) 
+		(Peso A_Salvo) 
+                (CF ?N1) 
 
 	) 
 	(Peso_Atenuantes
 		(Peso Dificil) 
+                (CF ?N2) 
 	) 
 	(Peso_Promedio
 		(Peso Bajo) 
+                (CF ?N3) 
 	)
 
-	)
+	
 	 => 
+        (bind ?Total (min ?N1 ?N2 ?N3) )
 	(assert (RespuestaDifusa
-		(Categoria Muy Facil)
+		(Categoria Muy_Facil)
+                (CF ?Total) 
 		)
 	) 
 )
 (defrule Regla11
 	(Peso_Reprobado 
-		(Peso A Salvo) 
+		(Peso A_Salvo) 
+                (CF ?N1) 
 
 	) 
 	(Peso_Atenuantes
 		(Peso Dificil) 
+                (CF ?N2) 
 	) 
 	(Peso_Promedio
 		(Peso Regular) 
-	)
-
+                (CF ?N3) 
 	)
 	 => 
+        (bind ?Total (min ?N1 ?N2 ?N3) )
 	(assert (RespuestaDifusa
 		(Categoria Facil)
+                (CF ?Total) 
 		)
 	) 
 )
 (defrule Regla12
 	(Peso_Reprobado 
-		(Peso A Salvo) 
+		(Peso A_Salvo)
+                (CF ?N1)  
 
 	) 
 	(Peso_Atenuantes
 		(Peso Dificil) 
+                (CF ?N2) 
 	) 
-	(or
 		(Peso_Promedio
-			(Peso Bueno) 
-		)
-		(Peso_Promedio
-			(Peso Sobresaliente) 
-		)
+			(Peso Bueno|Sobresaliente) 
+                        (CF ?N3) 
+
 	)
-	
 	 => 
+        (bind ?Total (min ?N1 ?N2 ?N3) )
 	(assert (RespuestaDifusa
 		(Categoria Regular)
+                (CF ?Total) 
 		)
 	) 
 )
 (defrule Regla13
 	(Peso_Reprobado 
 		(Peso Alerta) 
+                (CF ?N1) 
 
 	) 
-	(or
-		(Peso_Atenuantes
-			(Peso No Atenuante) 
-		) 
-		(Peso_Atenuantes
-			(Peso Regular) 
-		)
-	)
+	(Peso_Atenuantes
+		(Peso No_Atenuantes|Regular) 
+                (CF ?N2) 
+	) 
+
 	(Peso_Promedio
 		(Peso Bajo) 
+                (CF ?N3) 
 	)
 	
 	 => 
+        (bind ?Total (min ?N1 ?N2 ?N3) )
 	(assert (RespuestaDifusa
 		(Categoria Facil)
+                (CF ?Total) 
 		)
 	) 
 )
 (defrule Regla14
 	(Peso_Reprobado 
 		(Peso Alerta) 
+                (CF ?N1) 
 
 	) 
-	(or
-		(Peso_Atenuantes
-			(Peso No Atenuante) 
-		) 
-		(Peso_Atenuantes
-			(Peso Regular) 
-		)
-	)
+	(Peso_Atenuantes
+		(Peso No_Atenuantes|Regular) 
+                (CF ?N2) 
+	) 
 	(Peso_Promedio
 		(Peso Regular) 
+                (CF ?N3) 
 	)
 	
 	 => 
+        (bind ?Total (min ?N1 ?N2 ?N3) )
 	(assert (RespuestaDifusa
 		(Categoria Regular)
+                (CF ?Total) 
 		)
 	) 
 )
 (defrule Regla15
 	(Peso_Reprobado 
 		(Peso Alerta) 
+                (CF ?N1) 
 
 	) 
-	(or
 		(Peso_Atenuantes
-			(Peso No Atenuante) 
+			(Peso No_Atenuantes|Regular) 
+                        (CF ?N2) 
 		) 
-		(Peso_Atenuantes
-			(Peso Regular) 
-		)
-	)
-	(Peso_Promedio
-		(Peso Bueno) 
-	)
-	(Peso_Promedio
-		(Peso Sobresaliente) 
-	)
+            (Peso_Promedio
+                    (Peso Bueno|Sobresaliente) 
+                    (CF ?N3) 
+            )
+
 	 => 
+        (bind ?Total (min ?N1 ?N2 ?N3) )
 	(assert (RespuestaDifusa
 		(Categoria Normal)
+                 (CF ?Total) 
 		)
 	) 
 )
 (defrule Regla16
 	(Peso_Reprobado 
 		(Peso Alerta) 
+                (CF ?N1) 
 
 	) 
 	(Peso_Atenuantes
 		(Peso Dificil) 
+                (CF ?N2) 
 	)
 	 => 
+(bind ?Total (min ?N1 ?N2)  )
 	(assert (RespuestaDifusa
 		(Categoria Facil)
-		)
-	) 
-)
-(defrule Respuesta1
-	(RespuestaDifusa 
-		(Peso Muy Facil) 
-
-	) 
-	 => 
-(assert (Respuesta_Numero_Materias
-		(Formativas 2)
-		(Optativas 0)
-		(Libre_Opcion 2)
-		)
-	) 
-)
-(defrule Respuesta2
-	(RespuestaDifusa 
-		(Peso Facil) 
-
-	) 
-	 => 
-(assert (Respuesta_Numero_Materias
-		(Formativas 2)
-		(Optativas 1)
-		(Libre_Opcion 1)
-		)
-	) 
-)
-(defrule Respuesta3
-	(RespuestaDifusa 
-		(Peso Regular) 
-
-	) 
-	 => 
-(assert (Respuesta_Numero_Materias
-		(Formativas 3)
-		(Optativas 0)
-		(Libre_Opcion 1)
-		)
-	) 
-)
-(defrule Respuesta4
-	(RespuestaDifusa 
-		(Peso Normal) 
-
-	) 
-	 => 
-(assert (Respuesta_Numero_Materias
-		(Formativas 3)
-		(Optativas 1)
-		(Libre_Opcion 1)
-		)
-	) 
-)
-(defrule Respuesta5
-	(RespuestaDifusa 
-		(Peso Dificil) 
-
-	) 
-	 => 
-(assert (Respuesta_Numero_Materias
-		(Formativas 4)
-		(Optativas 1)
-		(Libre_Opcion 1)
-		)
-	) 
-)
-(defrule Respuesta6
-	(RespuestaDifusa 
-		(Peso Muy Dificil) 
-
-	) 
-	 => 
-(assert (Respuesta_Numero_Materias
-		(Formativas 5)
-		(Optativas 1)
-		(Libre_Opcion 0)
-		)
-	) 
-)
-(defrule Respuesta7
-	(RespuestaDifusa 
-		(Peso Peligro Prueba) 
-	) 
-	(Numero_Repro    
-		 (Numero ?N)
-	)
-	 => 
-(assert (Respuesta_Numero_Materias
-		(Formativas ?N)
-		(Optativas 0)
-		(Libre_Opcion 0)
-		)
-	) 
-)
-(defrule Respuesta8
-	(RespuestaDifusa 
-		(Peso Peligro Reprobadas) 
-
-	) 
-	(Numero_Repro    
-		 (Numero ?N)
-	)
-	 => 
-(assert (Respuesta_Numero_Materias
-		(Formativas ?N)
-		(Optativas 0)
-		(Libre_Opcion 2)
+                (CF ?Total)
 		)
 	) 
 )

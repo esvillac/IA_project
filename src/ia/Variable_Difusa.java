@@ -36,6 +36,8 @@ public class Variable_Difusa {
         return rangos_valor;
     }
 
+
+
     public HashMap getRangos() {
         return rangos_funcion;
     }

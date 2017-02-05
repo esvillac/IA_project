@@ -41,6 +41,9 @@
 	(multislot NombreMat)
 	 (slot Numero)
 )
+(deftemplate Materia_Repro_Actual
+	(multislot NombreMat)
+)Materia_Repro_Actual
 (deftemplate Materia_Final_Peso
 	(multislot NombreMat)
 	 (slot Peso)
@@ -80,29 +83,19 @@
 	(multislot LibreOpcion)
 )
 (deftemplate Peso_Reprobado
-	(multislot Peso)
+	(slot Peso)
 	(slot CF)
 )
 
 (deftemplate Peso_Atenuantes
-	(multislot Peso)
+	(slot Peso)
 	(slot CF)
 )
 (deftemplate Peso_Promedio
-	(multislot Peso)
+	(slot Peso)
 	(slot CF)
 )
 (deftemplate RespuestaDifusa
 	(multislot Categoria)
 	(slot CF)
-)
-(deffacts Hechos
-	(Estudiante
-            (Nombre Jordy German)
-            (Promedio 8.4)
-            (NivelEst 4)
-            (Reprobado No)
-            (Atenuantes No)
-	)
-
 )

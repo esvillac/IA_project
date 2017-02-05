@@ -19,16 +19,16 @@ public class VariablePromedio extends Variable_Difusa{
         float b = 7.5f;
         float m = (a + b) / 2;
         this.rangos_funcion.put("Bajo", new MembresiaTriangular(b, a, m));
-        a = 7.0f;
+        a = 6.5f;
         b = 8.5f;
         m = (a + b) / 2;
         this.rangos_funcion.put("Regular", new MembresiaTriangular(b, a, m));
-        a = 8.0f;
-        b = 9.5f;
+        a = 7.5f;
+        b = 8.5f;
         m = (a + b) / 2;
         this.rangos_funcion.put("Bueno", new MembresiaTriangular(b, a, m));
-        a = 8.5f;
-        b = 10.0f;
+        a = 8.0f;
+        b = 11.0f;
         m = (a + b) / 2;
         this.rangos_funcion.put("Sobresaliente", new MembresiaTriangular(b, a, m));
  

@@ -11,6 +11,5 @@ package ia;
  */
 public interface Membresia {
 
-
      float calculaMembresia(float x);
 }

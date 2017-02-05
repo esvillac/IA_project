@@ -173,22 +173,27 @@ public class ResultadoMaterias extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jButtonCerrarActionPerformed
 
-    
-    
     public void initComponents2() {
         initComponents();
 
-        
         DefaultListModel modelFormativas, modelOptativas, modeloLibreOp;//
         modelFormativas = new DefaultListModel();
         modelOptativas = new DefaultListModel();
         modeloLibreOp = new DefaultListModel();//
-        
-        asignarMateriasResultALista(PantallaAcademica.materiasResultLibreOpc, modeloLibreOp, jListLibreOpcion);
-        asignarMateriasResultALista(PantallaAcademica.materiasResultFormativa, modelFormativas, jListFormativas);
-        asignarMateriasResultALista(PantallaAcademica.materiasResultOptativa, modelOptativas, jListOptativas);
+        if (PantallaAcademica.materiasResultLibreOpc != null && !PantallaAcademica.materiasResultLibreOpc.isEmpty()) {
+            asignarMateriasResultALista(PantallaAcademica.materiasResultLibreOpc, modeloLibreOp, jListLibreOpcion);
+
+        }
+        if (PantallaAcademica.materiasResultFormativa != null && !PantallaAcademica.materiasResultFormativa.isEmpty()) {
+            asignarMateriasResultALista(PantallaAcademica.materiasResultFormativa, modelFormativas, jListFormativas);
+
+        }
+        if (PantallaAcademica.materiasResultOptativa != null && !PantallaAcademica.materiasResultOptativa.isEmpty()) {
+            asignarMateriasResultALista(PantallaAcademica.materiasResultOptativa, modelOptativas, jListOptativas);
+
+        }
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -223,12 +228,12 @@ public class ResultadoMaterias extends javax.swing.JFrame {
             }
         });
     }
-    
-    void asignarMateriasResultALista(ArrayList<String> materiasResult, DefaultListModel modelo, JList<String> listaTipoMateria){
-            for (String materia : materiasResult) {
-                modelo.addElement(materia);
-            }
-            listaTipoMateria.setModel(modelo);//
+
+    void asignarMateriasResultALista(ArrayList<String> materiasResult, DefaultListModel modelo, JList<String> listaTipoMateria) {
+        for (String materia : materiasResult) {
+            modelo.addElement(materia);
+        }
+        listaTipoMateria.setModel(modelo);//
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

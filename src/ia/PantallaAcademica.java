@@ -71,6 +71,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     private JTextField campo, promedio;
     private JList listaMaterias, listaMateriasSemetresAnterior, listaMateriasReprobadas, listaMateriasDeseables;
     private DefaultListModel modelo, modeloReprobadas, modeloSemestre, modeloDeseables;/*declaramos el Modelo*/
+
     private JTextField nombreMatPopUp;
     private JScrollPane scrollLista, scrollLista2, scrollLista3, scrollLista4;
     private JPopupMenu jPopupMenu1;
@@ -93,8 +94,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     public static ArrayList<String> materiasResultFormativa;
     public static ArrayList<String> materiasResultOptativa;
     public static ArrayList<String> materiasResultLibreOpc;
-    
-    
+
     public PantallaAcademica() {
         /*permite iniciar las propiedades de los componentes*/
         iniciarComponentes();
@@ -117,7 +117,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         filtrar_materia = new JLabel();
         filtrar_materia.setBounds(20, 25, 150, 20);
         filtrar_materia.setText("Filtrar materia: ");
-        
+
         campo = new JTextField();
         campo.setBounds(20, 50, 135, 23);
         agregar = new JButton();
@@ -127,12 +127,12 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         siguiente.setText("RECOMENDAR");
         siguiente.setFont(new Font("default", Font.BOLD, 16));
         siguiente.setBounds(430, 470, 180, 23);
-        
+
         atras = new JButton();
         atras.setText("ATRÁS");
         atras.setFont(new Font("default", Font.BOLD, 16));
         atras.setBounds(135, 470, 150, 23);
-        
+
         agregar.addActionListener(this);
         siguiente.addActionListener(this);
         atras.addActionListener(this);
@@ -145,16 +145,16 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         materias_r.setBounds(450, 220, 330, 23);
         materias_s.setBounds(20, 275, 330, 23);
         agregarMateriasSemestre = new JButton();
-     
+
         agregarMateriasSemestre.setBounds(20, 245, 25, 25);
         agregarMateriasSemestre.addActionListener(this);
-         Image img = null;
+        Image img = null;
         try {
             img = ImageIO.read(getClass().getResource("add_image.png"));
         } catch (IOException ex) {
             Logger.getLogger(PantallaAcademica.class.getName()).log(Level.SEVERE, null, ex);
         }
-           Image newimg = img.getScaledInstance( 25, 25,  java.awt.Image.SCALE_SMOOTH ) ;  
+        Image newimg = img.getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH);
 
         agregarMateriasSemestre.setIcon(new ImageIcon(newimg));
 
@@ -169,7 +169,6 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         agregarMateriasReprobadas.addActionListener(this);
         mensaje = new JLabel();
         mensaje.setBounds(90, 250, 280, 23);
-        
 
         //instanciamos la lista
         listaMaterias = new JList();
@@ -196,10 +195,21 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         }
         con.cierraConexion();
         //setmaterias(lista_materias_old);
-        campo.getDocument().addDocumentListener(new DocumentListener(){
-            @Override public void insertUpdate(DocumentEvent e) { filter(); }
-            @Override public void removeUpdate(DocumentEvent e) { filter(); }
-            @Override public void changedUpdate(DocumentEvent e) {}
+        campo.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                filter();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                filter();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+
             private void filter() {
                 String filter = campo.getText();
                 filterModel(modelo, filter);
@@ -249,7 +259,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                         materiaElimnarSelec = "listaMateriasSemetresAnterior";
                         int index = list.locationToIndex(evt.getPoint());
                         String nombre = listaMateriasSemetresAnterior.getModel().getElementAt(index).toString();
-            
+
                         jPopupMenu1.show(list, evt.getX(), evt.getY());
                         indexMenuItem = index;
 
@@ -377,33 +387,32 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                     display();
                 }
 
-
             }
         }
 
         if (evento.getSource() == agregarMateriasSemestre) {
-           
+
             displayMateriaSemestreAnterior(listaMaterias);
             verificaMateriaExiste(listaMaterias, listaMateriasSemetresAnterior, modeloSemestre);
 
         }
-        
+
         if (evento.getSource() == agregarMateriasReprobadas) {
             verificaMateriaExisteRepro(listaMaterias, listaMateriasReprobadas, modeloReprobadas);
 
         }
-        
+
         if (evento.getSource() == agregarMateriasDeseables) {
             verificaMateriaExiste(listaMaterias, listaMateriasDeseables, modeloDeseables);
 
         }
-        
+
         if (evento.getSource() == atras) {
             PantallaActExtracurricular ventanaActExtracurricular = new PantallaActExtracurricular();
             ventanaActExtracurricular.setVisible(true);
             this.setVisible(false);
         }
-        
+
         if (evento.getSource() == siguiente) {
             PruebaConexion x = new PruebaConexion();
             ResultSet rs = null;
@@ -413,7 +422,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
             Rete jess = new Rete();
             this.setVisible(false);
-            
+
             HashMap lista_materias_escogidas = new HashMap();
             HashMap lista_materias_escogidas_new = new HashMap();
             for (int i = 0; i < listaMateriasDeseables.getModel().getSize(); i++) {
@@ -428,21 +437,26 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                     System.out.println("error en parseo de valores");
                 }
             }
+            //Calculo el,peso mpara la nueva materia , la agrego a la base y se agrega en la lista de materias escogidas
+            try {
+                lista_materias_escogidas = peso_materia_nueva(lista_materias_escogidas_new, lista_materias_escogidas);
+            } catch (JessException ex) {
+                Logger.getLogger(PantallaAcademica.class.getName()).log(Level.SEVERE, null, ex);
+            }
             HashMap lista_materias_reproBase = new HashMap();
-                    HashMap lista_materias_reproActual = new HashMap();
             HashMap listaF_materias_veces_repro = new HashMap();
             for (int i = 0; i < listaMateriasReprobadas.getModel().getSize(); i++) {
                 String item = (String) listaMateriasReprobadas.getModel().getElementAt(i);
-               // lista_materias_reproActual.put(item, campo);
+                // lista_materias_reproActual.put(item, campo);
                 Map valores = new HashMap();
                 valores.put("nombre", item);
                 ResultSet rss = null;
                 int veces_repro = 0;
-                if(lista_veces_mat_rep.containsKey(item)){
+                if (lista_veces_mat_rep.containsKey(item)) {
                     veces_repro = Integer.parseInt(lista_veces_mat_rep.get(item).toString());
                     listaF_materias_veces_repro.put(item, veces_repro);//lista definitiva con las materias reprobadas más las veces que se ha tomado/reprobado
                 }
-                
+
                 rss = x.selectRegistro("public", "materias_reprobadas", valores);
                 try {
                     boolean ban = true;
@@ -464,91 +478,65 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                     }
                 } catch (SQLException e) {
                     System.out.println(e);
-                    System.out.println("kkk.k");
                 }
                 tamListRepro = lista_materias_reproBase.size();
             }
             try {
                 jess.batch("..//template//templates.clp");
                 jess.batch("..//rules//reglas_peso_materias_reprobadas.clp");
-                jess.batch("..//rules//reglas_peso_materia_nueva.clp");
-                Iterator ite = lista_materias_escogidas_new.entrySet().iterator();
-                jess.reset();
-                while (ite.hasNext()) {
-                    Map.Entry e = (Map.Entry) ite.next();
-                    String val = (String) e.getValue();
-                    String values[] = val.split(",");
-                    String asserts = "(Materia (NombreMat " + e.getKey() + ")" + "(Creditos " + values[0] + ")" + "(Flujo " + values[1] + ")" + "(Proyecto " + values[2] + ")" + "(Tipo " + values[3] + "))";
-                    System.out.println(asserts);
-                    jess.assertString(asserts);
 
-                }
-                
-                String assertsRepro = "(Numero_Repro (NombreEst Jordy German)(Numero "+tamListRepro+"))"; //Numero de materias que el estudiante ha reprobado
+                String assertsRepro = "(Numero_Repro (NombreEst Jordy German)(Numero " + tamListRepro + "))"; //Numero de materias que el estudiante ha reprobado
                 System.out.println(assertsRepro);
                 jess.assertString(assertsRepro);
-                
+
                 Iterator it_mat_repro = listaF_materias_veces_repro.entrySet().iterator();
-                while(it_mat_repro.hasNext()){//Asserts de las materias reprobadas más las veces que ha sido tomada/reprobada
-                     Map.Entry e = (Map.Entry) it_mat_repro.next();
-                     String veces = e.getValue().toString();
-                     String materia = e.getKey().toString();
-                     String assert_mat_veces = "(Veces_Materia_Reprobada (NombreEst Jordy German)(MatRepro "+ materia+")" + "(Veces "+veces+"))";
-                     System.out.println(assert_mat_veces);
-                     jess.assertString(assert_mat_veces);
+                while (it_mat_repro.hasNext()) {//Asserts de las materias reprobadas más las veces que ha sido tomada/reprobada
+                    Map.Entry e = (Map.Entry) it_mat_repro.next();
+                    String veces = e.getValue().toString();
+                    String materia = e.getKey().toString();
+                    String assert_mat_veces = "(Veces_Materia_Reprobada (NombreEst Jordy German)(MatRepro " + materia + ")" + "(Veces " + veces + "))";
+                    System.out.println(assert_mat_veces);
+                    jess.assertString(assert_mat_veces);
                 }
-                                
+
                 jess.run();
                 HashMap pesoF_reprobada = new HashMap();
                 int maxValue = 0;
                 Iterator it = jess.listFacts();
-                int i=0;
+                int i = 0;
                 while (it.hasNext()) {
                     Fact dd = (Fact) it.next();
                     String nombre = dd.getName();
-
-                    if (nombre.contains("Materia_Peso")) {
-                        System.out.println(dd.toString());
-                        Map valores = new HashMap();
-                        valores.put("nombre", dd.getSlotValue("NombreMat"));
-                        valores.put("dificultad", dd.getSlotValue("Peso"));
-                        valores.put("tipo", dd.getSlotValue("Tipo"));
-                        boolean u = false;
-                        u = x.insertRegistro("public", "materias", valores);
-                        lista_materias_escogidas.put(dd.getSlotValue("NombreMat"), "1," + dd.getSlotValue("Peso") + ',' + dd.getSlotValue("Tipo"));
-
-                    }
-                    if(nombre.contains("Peso_Repro")){//Peso_repro determinado segun la cantidad de materias que ha reprobado considerando aquellas por 2da vez
+                    if (nombre.contains("Peso_Repro")) {//Peso_repro determinado segun la cantidad de materias que ha reprobado considerando aquellas por 2da vez
                         i++;
                         System.out.println("Peso_Repro");
                         System.out.println(dd.toString());
                         System.out.println(dd.getSlotValue("Peso"));
                         pesoF_reprobada.put(i, dd.getSlotValue("Peso"));
                     }
-                    
-                    
+
                 }
                 Iterator it_pesoF_repro = pesoF_reprobada.entrySet().iterator();
-                while(it_pesoF_repro.hasNext()){
-                     Map.Entry e = (Map.Entry) it_pesoF_repro.next();
-                     int valor = Integer.parseInt(e.getValue().toString());
-                     if(valor > maxValue) {
+                while (it_pesoF_repro.hasNext()) {
+                    Map.Entry e = (Map.Entry) it_pesoF_repro.next();
+                    int valor = Integer.parseInt(e.getValue().toString());
+                    if (valor > maxValue) {
                         maxValue = valor;
-                        
+
                     }
                 }
-                System.out.println("Max Peso Materias Repro: "+maxValue);//PESO FINAL de peso materias repro
-
-                
+                System.out.println("Max Peso Materias Repro: " + maxValue);//PESO FINAL de peso materias repro
+                System.out.println("Max Peso Atenuantes: " + PantallaActExtracurricular.peso_atenuantes);//PESO FINAL de peso materias repro
+                String respuesta = respuesta_difusa(maxValue, tamListRepro);
                 jess.clear();
                 jess.batch("..//template//templates.clp");
-                jess.batch("..//rules//reglas.clp");
                 jess.batch("..//rules//reglas_ajuste_numero_materias.clp");
-                jess.batch("..//rules//reglas_respuesta.clp");
                 jess.batch("..//rules//reglas_peso_final.clp");
-
+                jess.batch("..//rules//reglas_respuesta.clp");
                 Iterator iteold = lista_materias_escogidas.entrySet().iterator();
                 jess.reset();
+                System.out.println(respuesta);
+                jess.assertString(respuesta);
                 int numero_formativas = 0;
                 int numero_optativas = 0;
                 int numero_libre_opcion = 0;
@@ -576,7 +564,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                     }
                 }
 
-                String asserts2 = "(Materias_Posibles_Cojer (Nombre " + "Jordy German" + ")" + "(Formativas " + numero_formativas + ")" + "(Optativas " + numero_optativas + ")" + "(Libre_Opcion " + numero_libre_opcion + "))";
+                String asserts2 = "(Materias_Posibles_Cojer (Nombre " + PantallaPrincipal.name + ")" + "(Formativas " + numero_formativas + ")" + "(Optativas " + numero_optativas + ")" + "(Libre_Opcion " + numero_libre_opcion + "))";
                 jess.assertString(asserts2);
                 System.out.println(asserts2);
                 Iterator iterep = lista_materias_reproBase.entrySet().iterator();
@@ -620,12 +608,12 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                     String nombre = dd.getName();
                     String resultado = dd.toString();
                     System.out.println(resultado);
-                    String values [];
-                                       
+                    String values[];
+
                     if (nombre.contains("Materias_Resultado")) {
-                        values=resultado.split("\\(");
-                        System.out.println("Resultado-> "+values[2]+" "+values[3]+" "+values[4]);
-                        if(values[2].contains("Formativas")){
+                        values = resultado.split("\\(");
+                        System.out.println("Resultado-> " + values[2] + " " + values[3] + " " + values[4]);
+                        if (values[2].contains("Formativas")) {
                             materiasResultFormativa = new ArrayList<>();
                             obtieneMateriasPorTipo2(values[2], "Formativas", materiasResultFormativa);
 //                            formativas = obtieneMateriasPorTipo(values[2], "Formativas");
@@ -637,12 +625,12 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 //                            }
 
                         }
-                        if(values[3].contains("Optativas")){
+                        if (values[3].contains("Optativas")) {
                             materiasResultOptativa = new ArrayList<>();
                             //optativas = obtieneMateriasPorTipo(values[3], "Optativas");
                             obtieneMateriasPorTipo2(values[3], "Optativas", materiasResultOptativa);
                         }
-                        if(values[4].contains("LibreOpcion")){
+                        if (values[4].contains("LibreOpcion")) {
                             //libreOp = obtieneMateriasPorTipo(values[4], "LibreOpcion");
                             materiasResultLibreOpc = new ArrayList<>();
                             obtieneMateriasPorTipo2(values[4], "LibreOpcion", materiasResultLibreOpc);
@@ -726,7 +714,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         }
 
     }
-    
+
     private void display() {
         String[] tipos = {"F", "OP", "LB"};
         comboTipos = new JComboBox<>(tipos);
@@ -784,37 +772,36 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         if (result == JOptionPane.OK_OPTION) {
             if ((jRB_si_proyecto.isSelected() || jRB_no_proyecto.isSelected()) && (jRB_si_flujo.isSelected() || jRB_no_flujo.isSelected())
                     && !(nombreMatPopUp.getText().isEmpty())) {
-                
-                if(jRB_si_flujo.isSelected() && jRB_si_proyecto.isSelected()){
+
+                if (jRB_si_flujo.isSelected() && jRB_si_proyecto.isSelected()) {
                     lista_materias_new.put(nombreMatPopUp.getText(), spinnerCreditos.getValue().toString() + ",Si,Si," + comboTipos.getSelectedItem().toString());///Corregir "4,Si,Si,F"
                     listadoMaterias.add(nombreMatPopUp.getText());
                     System.out.println("Si,Si");
                 }
-                    
-                if(jRB_no_flujo.isSelected() && jRB_no_proyecto.isSelected()){
+
+                if (jRB_no_flujo.isSelected() && jRB_no_proyecto.isSelected()) {
                     lista_materias_new.put(nombreMatPopUp.getText(), spinnerCreditos.getValue().toString() + ",No,No," + comboTipos.getSelectedItem().toString());
                     listadoMaterias.add(nombreMatPopUp.getText());
                     System.out.println("No,No");
                 }
-                    
-                if(jRB_si_flujo.isSelected() && jRB_no_proyecto.isSelected()){
+
+                if (jRB_si_flujo.isSelected() && jRB_no_proyecto.isSelected()) {
                     lista_materias_new.put(nombreMatPopUp.getText(), spinnerCreditos.getValue().toString() + ",Si,No," + comboTipos.getSelectedItem().toString());
                     listadoMaterias.add(nombreMatPopUp.getText());
                     System.out.println("Si,No");
                 }
-                    
-                if(jRB_no_flujo.isSelected() && jRB_si_proyecto.isSelected()){
+
+                if (jRB_no_flujo.isSelected() && jRB_si_proyecto.isSelected()) {
                     lista_materias_new.put(nombreMatPopUp.getText(), spinnerCreditos.getValue().toString() + ",No,Si," + comboTipos.getSelectedItem().toString());
                     listadoMaterias.add(nombreMatPopUp.getText());
                     System.out.println("No,Si");
                 }
-                    
-                
+
                 agregarNombre2(nombreMatPopUp.getText());//
                 mensaje.setText("Materia nueva");
             } else {
                 System.out.println("Llene todos los campos");
-                JOptionPane.showMessageDialog(null,"Llene todos los campos!!", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE); //Tipo de mensaje
+                JOptionPane.showMessageDialog(null, "Llene todos los campos!!", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE); //Tipo de mensaje
                 display();
             }
             System.out.println(nombreMatPopUp.getText()
@@ -824,34 +811,33 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         }
     }
 
-    
-    private String obtieneMateriasPorTipo(String value , String tipo){
-           String MateriasTipo = value.split(tipo)[1];
-           //System.out.println(MateriasTipo);
-           MateriasTipo = MateriasTipo.replace(")","");
-           System.out.println(MateriasTipo);
-           return MateriasTipo;
-       
-   }
-   
-   private ArrayList<String> obtieneMateriasPorTipo2(String value , String tipo, ArrayList<String> materiasResult){
-           String materias []; 
-           String materia;
-           String MateriasTipo = value.split(tipo)[1];
-           //System.out.println(MateriasTipo);
-           MateriasTipo = MateriasTipo.replace(")","");
-           MateriasTipo = MateriasTipo.replaceFirst(", ", "");
-           System.out.println(MateriasTipo);
-           materias = MateriasTipo.split(",");
-           
-           for(int j=0; j<materias.length; j++){
-                materia = materias[j];
-                materiasResult.add(materia);
-           }
-           return materiasResult;
-       
-   }
-    
+    private String obtieneMateriasPorTipo(String value, String tipo) {
+        String MateriasTipo = value.split(tipo)[1];
+        //System.out.println(MateriasTipo);
+        MateriasTipo = MateriasTipo.replace(")", "");
+        System.out.println(MateriasTipo);
+        return MateriasTipo;
+
+    }
+
+    private ArrayList<String> obtieneMateriasPorTipo2(String value, String tipo, ArrayList<String> materiasResult) {
+        String materias[];
+        String materia;
+        String MateriasTipo = value.split(tipo)[1];
+        //System.out.println(MateriasTipo);
+        MateriasTipo = MateriasTipo.replace(")", "");
+        MateriasTipo = MateriasTipo.replaceFirst(", ", "");
+        System.out.println(MateriasTipo);
+        materias = MateriasTipo.split(",");
+
+        for (int j = 0; j < materias.length; j++) {
+            materia = materias[j];
+            materiasResult.add(materia);
+        }
+        return materiasResult;
+
+    }
+
     private void eliminarNombre(int indice) {
         if (indice >= 0) {
             modelo.removeElementAt(indice);
@@ -894,7 +880,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
             }
         }
     }
-    
+
     private void verificaMateriaExisteRepro(JList listaMaterias, JList listaMateriasCategoria, DefaultListModel modelo) {
         if (listaMaterias.getSelectedIndex() != -1) {
             boolean existe = false;
@@ -910,8 +896,8 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                     }
                 }
                 if (existe == false) {
-                   displayMateriaReprobada(materiaSeleccionada, listaMateriasCategoria, modelo);
-                  
+                    displayMateriaReprobada(materiaSeleccionada, listaMateriasCategoria, modelo);
+
                 }
 
             } else {
@@ -921,11 +907,11 @@ public class PantallaAcademica extends JFrame implements ActionListener {
             }
         }
     }
-      
+
     private void displayMateriaSemestreAnterior(JList listaMaterias) {
         String materiaSeleccionada = listaMaterias.getSelectedValue().toString();
         JPanel panel = new JPanel(new GridLayout(0, 1));
-        int total=0,n_encuestados=0,dificultad=0;
+        int total = 0, n_encuestados = 0, dificultad = 0;
         String promedio;
         int min = 1;
         int max = 5;
@@ -934,8 +920,8 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         SpinnerModel modelSpin = new SpinnerNumberModel(initValue, min, max, step);
         JSpinner spinnerValor = new JSpinner(modelSpin);
         PruebaConexion con;
-        float newPromedio = 0; 
-   
+        float newPromedio = 0;
+
         con = new PruebaConexion();
         con.estableceConexion();
         Map valores = new HashMap();
@@ -952,32 +938,32 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         JPDificultad.add(spinnerValor);
         panel.add(JPDificultad);
         //UIManager.put("OptionPane.minimumSize", new Dimension(370, 400));
-        int result = JOptionPane.showConfirmDialog(null, panel, "INGRESAR DIFICULTAD",JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        int result = JOptionPane.showConfirmDialog(null, panel, "INGRESAR DIFICULTAD", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             try {
                 if (rss.next()) {
-                total = Integer.parseInt(rss.getString("total"));
-                n_encuestados = Integer.parseInt(rss.getString("n_encuestados"));
-                dificultad = Integer.parseInt(spinnerValor.getValue().toString());
-                n_encuestados++;
-                newPromedio=(float)(total+dificultad)/(float)(n_encuestados);
-                promedio = String.format(Locale.ROOT, "%.2f", newPromedio);
-                Map valoretem = new HashMap();
-                valoretem.put("dificultad",promedio);
-                valoretem.put("total",total+dificultad);
-                valoretem.put("n_encuestados",n_encuestados);
-                con.updateRegistro("public", "materias", Integer.parseInt(rss.getString("id")), valoretem);
-            }
-            }catch (SQLException ex) {
+                    total = Integer.parseInt(rss.getString("total"));
+                    n_encuestados = Integer.parseInt(rss.getString("n_encuestados"));
+                    dificultad = Integer.parseInt(spinnerValor.getValue().toString());
+                    n_encuestados++;
+                    newPromedio = (float) (total + dificultad) / (float) (n_encuestados);
+                    promedio = String.format(Locale.ROOT, "%.2f", newPromedio);
+                    Map valoretem = new HashMap();
+                    valoretem.put("dificultad", promedio);
+                    valoretem.put("total", total + dificultad);
+                    valoretem.put("n_encuestados", n_encuestados);
+                    con.updateRegistro("public", "materias", Integer.parseInt(rss.getString("id")), valoretem);
+                }
+            } catch (SQLException ex) {
                 Logger.getLogger(PantallaAcademica.class.getName()).log(Level.SEVERE, null, ex);
             }
-       
+
         } else {
             System.out.println("Cancelled");
         }
-       
+
     }
-    
+
     private void displayMateriaReprobada(Object item, JList listaMateriasCategoria, DefaultListModel modelo) {
         JTextField nombreMat = new JTextField(item.toString(), 20);
         nombreMat.setEnabled(false);
@@ -1017,7 +1003,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
             System.out.println("Cancelled");
         }
     }
-    
+
     private void eliminarMateriaItemActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         if (materiaElimnarSelec.equals("listaMaterias")) {
@@ -1033,21 +1019,173 @@ public class PantallaAcademica extends JFrame implements ActionListener {
             ((DefaultListModel) listaMateriasSemetresAnterior.getModel()).removeElementAt(indexMenuItem);
         }
     }
-    
+
     public void filterModel(DefaultListModel model, String filter) {
-        
-        DefaultListModel modeloF= new DefaultListModel();
+
+        DefaultListModel modeloF = new DefaultListModel();
         for (String s : listadoMaterias) {
             if (!s.toLowerCase().startsWith(filter)) {
                 //System.out.println("NO filtro");
 
             } else {
                 //if (!model.contains(s)) {
-                    modeloF.addElement(s);
+                modeloF.addElement(s);
                 //}
             }
         }
         listaMaterias.setModel(modeloF);
     }
 
+    public HashMap peso_materia_nueva(HashMap lista_materias_escogidas_new, HashMap lista_materias_escogidas) throws JessException {
+        PruebaConexion x = new PruebaConexion();
+        x.estableceConexion();
+        Rete jess = new Rete();
+        jess.batch("..//template//templates.clp");
+        jess.batch("..//rules//reglas_peso_materia_nueva.clp");
+        Iterator ite = lista_materias_escogidas_new.entrySet().iterator();
+        jess.reset();
+        while (ite.hasNext()) {
+            Map.Entry e = (Map.Entry) ite.next();
+            String val = (String) e.getValue();
+            String values[] = val.split(",");
+            String asserts = "(Materia (NombreMat " + e.getKey() + ")" + "(Creditos " + values[0] + ")" + "(Flujo " + values[1] + ")" + "(Proyecto " + values[2] + ")" + "(Tipo " + values[3] + "))";
+            System.out.println(asserts);
+            jess.assertString(asserts);
+
+        }
+
+        jess.run();
+        Iterator it = jess.listFacts();
+        int i = 0;
+        while (it.hasNext()) {
+            Fact dd = (Fact) it.next();
+            String nombre = dd.getName();
+
+            if (nombre.contains("Materia_Peso")) {
+                System.out.println(dd.toString());
+                Map valores = new HashMap();
+                valores.put("nombre", dd.getSlotValue("NombreMat"));
+                valores.put("dificultad", dd.getSlotValue("Peso"));
+                valores.put("tipo", dd.getSlotValue("Tipo"));
+                boolean u = false;
+                u = x.insertRegistro("public", "materias", valores);
+                lista_materias_escogidas.put(dd.getSlotValue("NombreMat"), "1," + dd.getSlotValue("Peso") + ',' + dd.getSlotValue("Tipo"));
+
+            }
+
+        }
+        jess.clear();
+        return lista_materias_escogidas;
+    }
+
+    public String respuesta_difusa(float maxValue, int tamListRepro) throws JessException {
+        Rete jess = new Rete();
+        jess.batch("..//template//templates.clp");
+        jess.batch("..//rules//reglasDifusas.clp");
+        jess.reset();
+        VariablePromedio vp = new VariablePromedio();
+        VariableReprobada vr = new VariableReprobada();
+        VariableAtenuante va = new VariableAtenuante();
+        HashMap maprepro = vr.EvaluarRango(maxValue);
+        HashMap mappro = vp.EvaluarRango((float) PantallaPrincipal.promedio);
+        HashMap mapate = va.EvaluarRango(PantallaActExtracurricular.peso_atenuantes);
+        Iterator it_vp = mappro.entrySet().iterator();
+        while (it_vp.hasNext()) {
+            Map.Entry e = (Map.Entry) it_vp.next();
+            double valor = Double.parseDouble(e.getValue().toString());
+            System.out.println(valor);
+            if (valor > 0) {
+                String asserts = "(Peso_Promedio (Peso " + e.getKey() + ")" + "(CF " + valor + "))";
+                System.out.println(asserts);
+                jess.assertString(asserts);
+
+            }
+        }
+        Iterator it_vr = maprepro.entrySet().iterator();
+        while (it_vr.hasNext()) {
+            Map.Entry e = (Map.Entry) it_vr.next();
+            double valor = Double.parseDouble(e.getValue().toString());
+            System.out.println(valor);
+            if (valor > 0) {
+                String asserts = "(Peso_Reprobado (Peso " + e.getKey() + ")" + "(CF " + valor + "))";
+                System.out.println(asserts);
+                jess.assertString(asserts);
+            }
+        }
+        Iterator it_va = mapate.entrySet().iterator();
+        while (it_va.hasNext()) {
+            Map.Entry e = (Map.Entry) it_va.next();
+            double valor = Double.parseDouble(e.getValue().toString());
+            System.out.println(valor);
+            if (valor > 0) {
+                String asserts = "(Peso_Atenuantes (Peso " + e.getKey() + ")" + "(CF " + valor + "))";
+                System.out.println(asserts);
+                jess.assertString(asserts);
+            }
+        }
+        HashMap respuestaDifusa = new HashMap();
+        jess.run();
+        Iterator it = jess.listFacts();
+        while (it.hasNext()) {
+            Fact dd = (Fact) it.next();
+            String nombre = dd.getName();
+            String resultad = dd.toString();
+            if (nombre.contains("RespuestaDifusa")) {
+                String resultado = dd.toString();
+                System.out.println(resultado);
+                respuestaDifusa.put(dd.getSlotValue("Categoria").toString(), dd.getSlotValue("CF").toString());
+            }
+        }
+        jess.clear();
+        int numF = 0;
+        int numOp = 0;
+        int numLB = 0;
+        if (PantallaPrincipal.nivel >= 5) {
+            VariableRespuesta_Formativa_noNovato rf = new VariableRespuesta_Formativa_noNovato(tamListRepro);
+            numF = (int) CentroMasa(rf.rangos_funcion, respuestaDifusa);
+            VariableRespuesta_Optativa rp = new VariableRespuesta_Optativa();
+            numOp = (int) CentroMasa(rp.rangos_funcion, respuestaDifusa);
+            VariableRespuesta_LibreOpcion_noNovato rl = new VariableRespuesta_LibreOpcion_noNovato();
+            numLB = (int) CentroMasa(rl.rangos_funcion, respuestaDifusa);
+
+        } else {
+            VariableRespuesta_Formativa_Novato rf = new VariableRespuesta_Formativa_Novato(tamListRepro);
+            numF = (int) CentroMasa(rf.rangos_funcion, respuestaDifusa);
+            numOp = 0;
+            VariableRespuesta_LibreOpcion_Novato rl = new VariableRespuesta_LibreOpcion_Novato();
+            numLB = (int) CentroMasa(rl.rangos_funcion, respuestaDifusa);
+        }
+
+        String assertsMaterias = "(Respuesta_Numero_Materias (Nombre_Estudiante " + PantallaPrincipal.name + ")(Formativas " + numF + ")(Optativas " + numOp + ")(Libre_Opcion " + numLB + "))";
+        return assertsMaterias;
+    }
+
+    public float CentroMasa(HashMap variable, HashMap respuesta) {
+        Iterator it = variable.entrySet().iterator();
+        float numerador = 0;
+        float denominador = 0;
+        while (it.hasNext()) {
+            Map.Entry e = (Map.Entry) it.next();
+            String key = (String) e.getKey();
+            Iterator it2 = respuesta.entrySet().iterator();
+            while (it2.hasNext()) {
+                Map.Entry o = (Map.Entry) it2.next();
+                String n = (String) o.getKey();
+                if (n.equals(key)) {
+                    System.out.println(e.getKey());
+                    MembresiaTriangular m = (MembresiaTriangular) e.getValue();
+                    numerador = numerador + (m.extremo_derecho * (Float.parseFloat(o.getValue().toString())));
+                    denominador = denominador + (Float.parseFloat(o.getValue().toString()));
+                    System.out.println(m.extremo_derecho);
+                    System.out.println(o.getValue());
+                    System.out.println(numerador);
+                    System.out.println(denominador);
+                }
+            }
+
+        }
+        float resp = (float) Math.ceil(numerador / denominador);
+        System.out.println(resp);
+        return resp;
+    }
 }

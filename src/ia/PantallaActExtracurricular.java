@@ -30,6 +30,7 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
     /**
      * Creates new form Ventana_Act_Extracurricular
      */
+    public  static int peso_atenuantes=0;
     private List<JCheckBox> checkboxes = new ArrayList<JCheckBox>();
     int total;
     public PantallaActExtracurricular() {
@@ -313,6 +314,7 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
                     Fact dd = (Fact) it.next();
                     String nombre = dd.getName();
                     System.out.println(dd.toString());
+                    peso_atenuantes=total;
 
                 }
           } catch (JessException ex) {

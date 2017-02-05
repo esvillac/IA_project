@@ -13,9 +13,9 @@ import javax.swing.JOptionPane;
  */
 public class MembresiaTriangular implements Membresia{
 
-    private float extremo_derecho;
-    private float extremo_izquierdo;
-    private float media;
+    public float extremo_derecho;
+    public float extremo_izquierdo;
+    public float media;
 
     public MembresiaTriangular(float extremo_derecho, float extremo_izquierdo, float media) {
         this.extremo_derecho = extremo_derecho;
@@ -25,6 +25,7 @@ public class MembresiaTriangular implements Membresia{
 
     @Override
     public float calculaMembresia(float x) {
+        if(x==media){return 1;}
         if (x <= extremo_izquierdo) {
             return 0;
         } else if ((x <= media) && x > extremo_izquierdo) {

@@ -17,6 +17,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form PantallPrincipal
      */
+    public static double promedio=0;
+        public static String name="";
+          public static int nivel=0;
     public PantallaPrincipal() {
         initComponents();
         /*pone la ventana en el Centro de la pantalla*/
@@ -222,7 +225,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         if(!(jTextNivel.getText().isEmpty()) && !(jTextNombreEst.getText().isEmpty()) && !(jTextProm.getText().isEmpty()) && 
                 ((rb_estudiante.isSelected()==true)) || (rb_experto.isSelected()==true)){
             try{
-                Float.parseFloat(jTextProm.getText().replace(',', '.'));
+                nivel=Integer.parseInt(jTextNivel.getText());
+                promedio=Float.parseFloat(jTextProm.getText().replace(',', '.'));
+                name=jTextNombreEst.getText();
                 PantallaActExtracurricular ventanaAcademica = new PantallaActExtracurricular();
                 ventanaAcademica.setVisible(true);
                 this.setVisible(false);
