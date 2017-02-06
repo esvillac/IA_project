@@ -95,6 +95,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     public static ArrayList<String> materiasResultFormativa;
     public static ArrayList<String> materiasResultOptativa;
     public static ArrayList<String> materiasResultLibreOpc;
+    private JButton jButton2;
 
     public PantallaAcademica() {
         /*permite iniciar las propiedades de los componentes*/
@@ -110,10 +111,12 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     }
 
     private void iniciarComponentes() {
+        jButton2 = new javax.swing.JButton();
         contenedor = getContentPane();/*instanciamos el contenedor*/
         /*con esto definmos nosotros mismos los tamaños y posicion
          * de los componentes*/
 
+        setUndecorated(true);
         contenedor.setLayout(null);
         filtrar_materia = new JLabel();
         filtrar_materia.setBounds(20, 25, 150, 20);
@@ -133,6 +136,20 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         atras.setText("ATRÁS");
         atras.setFont(new Font("default", Font.BOLD, 16));
         atras.setBounds(135, 470, 150, 23);
+
+        jButton2.setBackground(new java.awt.Color(0, 153, 0));
+        jButton2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jButton2.setText("Salir");
+        jButton2.setFocusPainted(false);
+        jButton2.setBounds(750, 0, 90, 33);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+
+                System.exit(0);
+
+            }
+        });
 
         agregar.addActionListener(this);
         siguiente.addActionListener(this);
@@ -330,6 +347,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         contenedor.add(filtrar_materia);
         contenedor.add(campo);
         contenedor.add(agregar);
+        contenedor.add(jButton2);
         //contenedor.add(promedio);
         //contenedor.add(agregarPromedio);
         contenedor.add(agregarMateriasSemestre);
