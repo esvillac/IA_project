@@ -5,7 +5,6 @@
  */
 package ia;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
 import ia.PantallaActExtracurricular.buttonListener;
 import java.awt.Color;
 import java.awt.Container;
@@ -380,15 +379,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         return retValue;
     }
 
-    public void setmaterias(HashMap lista_materias) {
-        TextAutoCompleter t = new TextAutoCompleter(campo);
-        Iterator it = lista_materias.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry e = (Map.Entry) it.next();
-            t.addItem((String) e.getKey());
-        }
 
-    }
 
     @Override
     public void actionPerformed(ActionEvent evento) {
@@ -506,8 +497,8 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                 tamListRepro = lista_materias_reproBase.size();
             }
             try {
-                jess.batch("..//template//templates.clp");
-                jess.batch("..//rules//reglas_peso_materias_reprobadas.clp");
+                jess.batch("template/templates.clp");
+                jess.batch("rules/reglas_peso_materias_reprobadas.clp");
 
                 String assertsRepro = "(Numero_Repro (NombreEst Jordy German)(Numero " + tamListRepro + "))"; //Numero de materias que el estudiante ha reprobado
                 System.out.println(assertsRepro);
@@ -553,10 +544,10 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                 System.out.println("Max Peso Atenuantes: " + PantallaActExtracurricular.peso_atenuantes);//PESO FINAL de peso materias repro
                 String respuesta = respuesta_difusa(maxValue, tamListRepro);
                 jess.clear();
-                jess.batch("..//template//templates.clp");
-                jess.batch("..//rules//reglas_ajuste_numero_materias.clp");
-                jess.batch("..//rules//reglas_peso_final.clp");
-                jess.batch("..//rules//reglas_respuesta.clp");
+                jess.batch("template/templates.clp");
+                jess.batch("rules/reglas_ajuste_numero_materias.clp");
+                jess.batch("rules/reglas_peso_final.clp");
+                jess.batch("rules/reglas_respuesta.clp");
                 Iterator iteold = lista_materias_escogidas.entrySet().iterator();
                 jess.reset();
                 System.out.println(respuesta);
@@ -1064,8 +1055,8 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         PruebaConexion x = new PruebaConexion();
         x.estableceConexion();
         Rete jess = new Rete();
-        jess.batch("..//template//templates.clp");
-        jess.batch("..//rules//reglas_peso_materia_nueva.clp");
+        jess.batch("template/templates.clp");
+        jess.batch("rules/reglas_peso_materia_nueva.clp");
         Iterator ite = lista_materias_escogidas_new.entrySet().iterator();
         jess.reset();
         while (ite.hasNext()) {
@@ -1104,8 +1095,8 @@ public class PantallaAcademica extends JFrame implements ActionListener {
 
     public String respuesta_difusa(float maxValue, int tamListRepro) throws JessException {
         Rete jess = new Rete();
-        jess.batch("..//template//templates.clp");
-        jess.batch("..//rules//reglasDifusas.clp");
+        jess.batch("template/templates.clp");
+        jess.batch("rules/reglasDifusas.clp");
         jess.reset();
         VariablePromedio vp = new VariablePromedio();
         VariableReprobada vr = new VariableReprobada();

@@ -331,7 +331,7 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
             }
          System.out.println("El peso de las actividades extracurriculares es"+ total);
           try {
-              jess.batch("..//template//templates.CLP");
+              jess.batch("template/templates.clp");
               jess.reset();
               String asserts = "(Actividades_Extracurriculares(Peso_ActividadesExtra "+total+"))";
               System.out.println(asserts);
