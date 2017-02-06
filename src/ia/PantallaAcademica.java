@@ -195,7 +195,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         //instanciamos la lista
         listaMaterias = new JList();
         PruebaConexion con;
-        con = new PruebaConexion();
+        con = new PruebaConexion(IA.user,IA.pass);
         con.estableceConexion();
         ResultSet rs = null;
         rs = con.selectRegistro("public", "materias", null);
@@ -432,7 +432,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         }
 
         if (evento.getSource() == siguiente) {
-            PruebaConexion x = new PruebaConexion();
+            PruebaConexion x = new PruebaConexion(IA.user,IA.pass);
             ResultSet rs = null;
             String cadena = "";
             int tamListRepro = 0;
@@ -992,7 +992,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
             PruebaConexion con;
             float newPromedio = 0; 
 
-            con = new PruebaConexion();
+            con = new PruebaConexion(IA.user,IA.pass);
             con.estableceConexion();
             Map valores = new HashMap();
             valores.put("nombre", materiaSeleccionada);
@@ -1131,7 +1131,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     }
 
     public HashMap peso_materia_nueva(HashMap lista_materias_escogidas_new, HashMap lista_materias_escogidas) throws JessException {
-        PruebaConexion x = new PruebaConexion();
+        PruebaConexion x = new PruebaConexion(IA.user,IA.pass);
         x.estableceConexion();
         Rete jess = new Rete();
         jess.batch("template/templates.clp");

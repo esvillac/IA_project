@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PantallaExperto extends javax.swing.JFrame {
 
-private PruebaConexion db = new PruebaConexion();
+private PruebaConexion db = new PruebaConexion(IA.user,IA.pass);
     private Object[][] dtPersona;
     /**
      * Creates new form interfaz
