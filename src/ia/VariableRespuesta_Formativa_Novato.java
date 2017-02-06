@@ -21,12 +21,12 @@ public class VariableRespuesta_Formativa_Novato extends Variable_Difusa {
         a = numero_repro;
         b = numero_repro+1;
         m = (a + b) / 2;
-        this.rangos_funcion.put("Peligro Reprobadas", new MembresiaTriangular(b, a, m));
+        this.rangos_funcion.put("Peligro_Reprobadas", new MembresiaTriangular(b, a, m));
 
         a = 1;
         b = 2;
         m = (a + b) / 2;
-        this.rangos_funcion.put("Muy Facil", new MembresiaTriangular(b, a, m));
+        this.rangos_funcion.put("Muy_Facil", new MembresiaTriangular(b, a, m));
         a = 2;
         b = 2;
         m = (a + b) / 2;
@@ -46,7 +46,7 @@ public class VariableRespuesta_Formativa_Novato extends Variable_Difusa {
         a = 4f;
         b = 5f;
         m = (a + b) / 2;
-        this.rangos_funcion.put("Muy Dificil", new MembresiaTriangular(b, a, m));
+        this.rangos_funcion.put("Muy_Dificil", new MembresiaTriangular(b, a, m));
     }
 
 }

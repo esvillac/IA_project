@@ -21,11 +21,11 @@ public class VariableRespuesta_LibreOpcion_noNovato extends Variable_Difusa {
         a = 0;
         b = 2;
         m = (a + b) / 2;
-        this.rangos_funcion.put("Peligro Reprobadas", new MembresiaTriangular(b, a, m));
+        this.rangos_funcion.put("Peligro_Reprobadas", new MembresiaTriangular(b, a, m));
         a = 0;
         b = 1;
         m = (a + b) / 2;
-        this.rangos_funcion.put("Muy Facil", new MembresiaTriangular(b, a, m));
+        this.rangos_funcion.put("Muy_Facil", new MembresiaTriangular(b, a, m));
         a = 0f;
         b = 0;
         m = (a + b) / 2;
@@ -45,7 +45,7 @@ public class VariableRespuesta_LibreOpcion_noNovato extends Variable_Difusa {
         a = 1f;
         b = 2f;
         m = (a + b) / 2;
-        this.rangos_funcion.put("Muy Dificil", new MembresiaTriangular(b, a, m));
+        this.rangos_funcion.put("Muy_Dificil", new MembresiaTriangular(b, a, m));
     }
 
 }

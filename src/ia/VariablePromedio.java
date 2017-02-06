@@ -15,7 +15,7 @@ public class VariablePromedio extends Variable_Difusa{
 
 
     public VariablePromedio() {
-        float a = 6;
+        float a = 5;
         float b = 7.5f;
         float m = (a + b) / 2;
         this.rangos_funcion.put("Bajo", new MembresiaTriangular(b, a, m));

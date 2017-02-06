@@ -562,7 +562,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                 jess.batch("rules/reglas_respuesta.clp");
                 Iterator iteold = lista_materias_escogidas.entrySet().iterator();
                 jess.reset();
-                System.out.println(respuesta);
+                System.out.println("respuesta difusa:"+respuesta);
                 jess.assertString(respuesta);
                 int numero_formativas = 0;
                 int numero_optativas = 0;
@@ -1240,6 +1240,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         int numOp = 0;
         int numLB = 0;
         if (PantallaPrincipal.nivel >= 5) {
+            System.out.println("estoy en el nivel :"+PantallaPrincipal.nivel);
             VariableRespuesta_Formativa_noNovato rf = new VariableRespuesta_Formativa_noNovato(tamListRepro);
             numF = (int) CentroMasa(rf.rangos_funcion, respuestaDifusa);
             VariableRespuesta_Optativa rp = new VariableRespuesta_Optativa();
@@ -1260,6 +1261,8 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     }
 
     public float CentroMasa(HashMap variable, HashMap respuesta) {
+        System.out.println(variable);
+        System.out.println(respuesta);
         Iterator it = variable.entrySet().iterator();
         float numerador = 0;
         float denominador = 0;
