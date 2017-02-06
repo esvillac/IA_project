@@ -269,16 +269,10 @@ public class PantallaActExtracurricular extends javax.swing.JFrame {
 
     private void jButtonSgtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSgtActionPerformed
                              
-        if((jCheckViveFuera.isSelected()) || (jCheckCasado.isSelected()) || (jCheckHijos.isSelected()) || (jCheckTrabaja.isSelected())
-                || (jCheckImpedimento.isSelected())){
-            PantallaAcademica ventanaAcademica = new PantallaAcademica();
-            ventanaAcademica.setVisible(true);
-            this.setVisible(false);
-        }
-        else{
-            System.out.println("Seleccione al menos una opción para poder avanzar");
-            JOptionPane.showMessageDialog(null,"Seleccione al menos una opción para poder continuar!!", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE); //Tipo de mensaje
-        } 
+        PantallaAcademica ventanaAcademica = new PantallaAcademica();
+        ventanaAcademica.setVisible(true);
+        this.setVisible(false);
+        
     
     }//GEN-LAST:event_jButtonSgtActionPerformed
 

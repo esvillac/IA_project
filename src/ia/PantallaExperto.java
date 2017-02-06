@@ -83,8 +83,8 @@ private PruebaConexion db = new PruebaConexion();
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setFont(new java.awt.Font("Century Schoolbook L", 1, 15)); // NOI18N
-        jButton1.setText("Atras");
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jButton1.setText("Atrás");
         jButton1.setToolTipText("");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
