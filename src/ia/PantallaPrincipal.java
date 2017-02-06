@@ -259,7 +259,6 @@ public class PantallaPrincipal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        float promedio;
         if((rb_estudiante.isSelected()==false) && (rb_experto.isSelected()==false)){
             JOptionPane.showMessageDialog(null,"Seleccione un rol: Estudiate/experto", "Mensaje de Advertencia", JOptionPane.WARNING_MESSAGE);
         }
