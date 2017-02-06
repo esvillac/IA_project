@@ -15,6 +15,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.color.CMMException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -117,7 +118,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         filtrar_materia = new JLabel();
         filtrar_materia.setBounds(20, 25, 150, 20);
         filtrar_materia.setText("Filtrar materia: ");
-
+        setIconImage(getIconImage());
         campo = new JTextField();
         campo.setBounds(20, 50, 135, 23);
         agregar = new JButton();
@@ -354,6 +355,11 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         });
         t.start();
 
+    }
+
+    public Image getIconImage() {
+        Image retValue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("images/IA_LOGO.png"));
+        return retValue;
     }
 
     public void setmaterias(HashMap lista_materias) {
@@ -636,7 +642,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                             obtieneMateriasPorTipo2(values[4], "LibreOpcion", materiasResultLibreOpc);
                         }
                     }
- 
+
                 }
 
             } catch (JessException ex) {

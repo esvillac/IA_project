@@ -5,6 +5,8 @@
  */
 package ia;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
@@ -40,16 +42,17 @@ public class ResultadoMaterias extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jListLibreOpcion = new javax.swing.JList<>();
+        jListLibreOpcion = new javax.swing.JList<String>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jListFormativas = new javax.swing.JList<>();
+        jListFormativas = new javax.swing.JList<String>();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jListOptativas = new javax.swing.JList<>();
+        jListOptativas = new javax.swing.JList<String>();
         jLabel4 = new javax.swing.JLabel();
         jButtonVolverPrincipio = new javax.swing.JButton();
         jButtonCerrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setIconImage(getIconImage());
 
         jPanel1.setBackground(new java.awt.Color(180, 233, 163));
 
@@ -192,6 +195,10 @@ public class ResultadoMaterias extends javax.swing.JFrame {
             asignarMateriasResultALista(PantallaAcademica.materiasResultOptativa, modelOptativas, jListOptativas);
 
         }
+    }
+         public Image getIconImage() {
+        Image retValue = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("images/IA_LOGO.png"));
+        return retValue;
     }
 
     /**
