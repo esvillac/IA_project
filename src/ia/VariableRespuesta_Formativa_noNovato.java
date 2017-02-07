@@ -17,6 +17,9 @@ public class VariableRespuesta_Formativa_noNovato extends Variable_Difusa {
         float a = numero_repro;
         float b = numero_repro;
         float m = (a + b) / 2;
+        if (numero_repro > 3) {
+            b = 3;
+        }
         this.rangos_funcion.put("Peligro_Prueba", new MembresiaTriangular(b, a, m));
         a = numero_repro;
         b = numero_repro;
