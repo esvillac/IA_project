@@ -136,7 +136,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         siguiente.setBounds(460, 470, 180, 23);
 
         atras = new JButton();
-        atras.setText("AtráS");
+        atras.setText("Atrás");
         atras.setFont(new java.awt.Font("Tahoma", 1, 18));
         atras.setBounds(165, 470, 150, 23);
 
@@ -426,6 +426,7 @@ public class PantallaAcademica extends JFrame implements ActionListener {
             this.setVisible(false);
             HashMap lista_materias_escogidas = new HashMap();
             HashMap lista_materias_escogidas_new = new HashMap();
+            HashMap lista_materias_semest_ant_new = new HashMap();
             for (int i = 0; i < listaMateriasDeseables.getModel().getSize(); i++) {
                 String item = (String) listaMateriasDeseables.getModel().getElementAt(i);
                 System.out.println("Item = " + item);
@@ -443,13 +444,14 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                 String item = (String) listaMateriasSemetresAnterior.getModel().getElementAt(i);
                 System.out.println("Item = " + item);
                 if (lista_materias_new.containsKey(item)) {
-                    lista_materias_escogidas_new.put(item, lista_materias_new.get(item));
+                    lista_materias_semest_ant_new.put(item, lista_materias_new.get(item));
 
                 }
             }
             //Calculo el,peso mpara la nueva materia , la agrego a la base y se agrega en la lista de materias escogidas
             try {
                 lista_materias_escogidas = peso_materia_nueva(lista_materias_escogidas_new, lista_materias_escogidas);
+                peso_materia_nueva_semestre_ant(lista_materias_semest_ant_new);
                 actualiza_pesos_materiassemestres_anteriores();
             } catch (JessException | SQLException ex) {
                 Logger.getLogger(PantallaAcademica.class.getName()).log(Level.SEVERE, null, ex);
@@ -975,12 +977,12 @@ public class PantallaAcademica extends JFrame implements ActionListener {
                 System.out.println(dd.toString());
                 Map valores = new HashMap();
                 String nombreM = dd.getSlotValue("NombreMat").toString();
-                System.out.println(valoresMatNueva);
-                int total = Integer.parseInt(valoresMatNueva.get(nombreM).toString());
+                //System.out.println(valoresMatNueva);
+                //int total = Integer.parseInt(valoresMatNueva.get(nombreM).toString());
                 valores.put("nombre", dd.getSlotValue("NombreMat"));
                 valores.put("dificultad", dd.getSlotValue("Peso"));
                 valores.put("tipo", dd.getSlotValue("Tipo"));
-                valores.put("total", total);
+                valores.put("total", dd.getSlotValue("Peso"));////Se corregio total x peso
                 valores.put("n_encuestados", 1);
                 boolean u = false;
                 u = x.insertRegistro("public", "materias", valores);
@@ -991,6 +993,52 @@ public class PantallaAcademica extends JFrame implements ActionListener {
         }
         jess.clear();
         return lista_materias_escogidas;
+    }
+    
+    public void peso_materia_nueva_semestre_ant(HashMap lista_materias_semest_ant__new) throws JessException {
+        PruebaConexion x = new PruebaConexion(IA.user, IA.pass);
+        x.estableceConexion();
+        Rete jess = new Rete();
+        jess.batch("template/templates.clp");
+        jess.batch("rules/reglas_peso_materia_nueva.clp");
+        Iterator ite = lista_materias_semest_ant__new.entrySet().iterator();
+        jess.reset();
+        while (ite.hasNext()) {
+            Map.Entry e = (Map.Entry) ite.next();
+            String val = (String) e.getValue();
+            String values[] = val.split(",");
+            String asserts = "(Materia (NombreMat " + e.getKey() + ")" + "(Creditos " + values[0] + ")" + "(Flujo " + values[1] + ")" + "(Proyecto " + values[2] + ")" + "(Tipo " + values[3] + "))";
+            System.out.println(asserts);
+            jess.assertString(asserts);
+
+        }
+        jess.run();
+        Iterator it = jess.listFacts();
+        int i = 0;
+        while (it.hasNext()) {
+            Fact dd = (Fact) it.next();
+            String nombre = dd.getName();
+
+            if (nombre.contains("Materia_Peso")) {
+                System.out.println(dd.toString());
+                Map valores = new HashMap();
+                String nombreM = dd.getSlotValue("NombreMat").toString();
+                //System.out.println(valoresMatNueva);
+                //int total = Integer.parseInt(valoresMatNueva.get(nombreM).toString());
+                valores.put("nombre", dd.getSlotValue("NombreMat"));
+                valores.put("dificultad", dd.getSlotValue("Peso"));
+                valores.put("tipo", dd.getSlotValue("Tipo"));
+                valores.put("total", dd.getSlotValue("Peso"));////Se corregio total x peso
+                valores.put("n_encuestados", 1);
+                boolean u = false;
+                u = x.insertRegistro("public", "materias", valores);
+                //lista_materias_escogidas.put(dd.getSlotValue("NombreMat"), "1," + dd.getSlotValue("Peso") + ',' + dd.getSlotValue("Tipo"));
+
+            }
+
+        }
+        jess.clear();
+        
     }
 
     public String respuesta_difusa(float maxValue, int tamListRepro) throws JessException {
@@ -1108,8 +1156,8 @@ public class PantallaAcademica extends JFrame implements ActionListener {
     }
 
     public void actualiza_pesos_materiassemestres_anteriores() throws SQLException {
-        Iterator it_mat_sem_amterior = lista_materias_seleccionadas.entrySet().iterator();
-        while (it_mat_sem_amterior.hasNext()) {//Asserts de las materias reprobadas más las veces que ha sido tomada/reprobada
+        Iterator it_mat_sem_amterior = valoresMatNueva.entrySet().iterator();
+        while (it_mat_sem_amterior.hasNext()) {
             Map.Entry e = (Map.Entry) it_mat_sem_amterior.next();
             float pesos_ponderados_del_estudiante = Float.parseFloat(e.getValue().toString());
             String materia = e.getKey().toString();
